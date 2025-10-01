@@ -240,7 +240,7 @@ export default function Projects() {
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent opacity-80" />
 
                 {/* Hover overlay */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 !bg-[url(https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/dedc825e-0e65-4342-9b2e-34dddedf0dab/visual-edit-uploads/1759348428366-gm02skqo3ot.png)] !bg-cover !bg-center" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 !bg-cover !bg-center !bg-[url(https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/dedc825e-0e65-4342-9b2e-34dddedf0dab/visual-edit-uploads/1759348891182-p19ojvvgtnl.png)] !bg-cover !bg-center" />
               </div>
 
               <div className="p-6 space-y-4 relative !bg-transparent">
