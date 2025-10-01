@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
@@ -15,51 +15,51 @@ export default function Experience() {
   const timelineRef = useRef<HTMLDivElement>(null);
 
   const experiences = [
-    {
-      type: 'education',
-      title: 'Software Engineering Technology (Co-op)',
-      organization: 'Centennial College',
-      location: 'Toronto, ON',
-      period: '2023 - 2027 (Expected)',
-      current: false,
-      description: 'Pursuing an advanced diploma in Software Engineering Technology with a focus on full-stack development, database systems, and software design patterns.',
-      highlights: [
-        'Relevant Coursework: Data Structures, Web Development, Database Design, OOP',
-        'Dean\'s List Achievement',
-        'Active member of the Computer Science Club',
-      ],
-    },
-    {
-      type: 'work',
-      title: 'Software Development Intern',
-      organization: 'Tech Solutions Inc.',
-      location: 'Toronto, ON',
-      period: 'Summer 2024',
-      current: false,
-      description: 'Contributed to the development of web applications and gained hands-on experience with modern development practices.',
-      highlights: [
-        'Developed responsive web components using React and TypeScript',
-        'Collaborated with senior developers on feature implementation',
-        'Participated in code reviews and agile development processes',
-        'Improved application performance by 25% through optimization',
-      ],
-    },
-    {
-      type: 'work',
-      title: 'Freelance Web Developer',
-      organization: 'Self-Employed',
-      location: 'Remote',
-      period: '2023 - Present',
-      current: true,
-      description: 'Building custom websites and web applications for small businesses and startups.',
-      highlights: [
-        'Delivered 10+ projects for clients across various industries',
-        'Managed full project lifecycle from requirements to deployment',
-        'Maintained 100% client satisfaction rate',
-        'Specialized in responsive design and modern web technologies',
-      ],
-    },
-  ];
+  {
+    type: 'education',
+    title: 'Software Engineering Technology (Co-op)',
+    organization: 'Centennial College',
+    location: 'Toronto, ON',
+    period: '2023 - 2027 (Expected)',
+    current: false,
+    description: 'Pursuing an advanced diploma in Software Engineering Technology with a focus on full-stack development, database systems, and software design patterns.',
+    highlights: [
+    'Relevant Coursework: Data Structures, Web Development, Database Design, OOP',
+    'Dean\'s List Achievement',
+    'Active member of the Computer Science Club']
+
+  },
+  {
+    type: 'work',
+    title: 'Software Development Intern',
+    organization: 'Tech Solutions Inc.',
+    location: 'Toronto, ON',
+    period: 'Summer 2024',
+    current: false,
+    description: 'Contributed to the development of web applications and gained hands-on experience with modern development practices.',
+    highlights: [
+    'Developed responsive web components using React and TypeScript',
+    'Collaborated with senior developers on feature implementation',
+    'Participated in code reviews and agile development processes',
+    'Improved application performance by 25% through optimization']
+
+  },
+  {
+    type: 'work',
+    title: 'Freelance Web Developer',
+    organization: 'Self-Employed',
+    location: 'Remote',
+    period: '2023 - Present',
+    current: true,
+    description: 'Building custom websites and web applications for small businesses and startups.',
+    highlights: [
+    'Delivered 10+ projects for clients across various industries',
+    'Managed full project lifecycle from requirements to deployment',
+    'Maintained 100% client satisfaction rate',
+    'Specialized in responsive design and modern web technologies']
+
+  }];
+
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -123,7 +123,7 @@ export default function Experience() {
             <TrendingUp className="w-4 h-4" />
             My Journey
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold gradient-text">Experience</h2>
+          <h2 className="text-4xl md:text-6xl font-bold gradient-text !opacity-100 !block">Experience</h2>
           <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
             My educational background and professional experience in software development
           </p>
@@ -134,18 +134,18 @@ export default function Experience() {
           {/* Vertical timeline line */}
           <div
             ref={timelineRef}
-            className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/80 to-primary/20 hidden sm:block origin-top"
-          />
+            className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/80 to-primary/20 hidden sm:block origin-top" />
+
 
           {/* Experience Cards */}
           <div ref={cardsContainerRef} className="space-y-8 md:space-y-12">
-            {experiences.map((exp, index) => (
-              <div
-                key={index}
-                className={`experience-card relative flex flex-col md:flex-row gap-8 ${
-                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                }`}
-              >
+            {experiences.map((exp, index) =>
+            <div
+              key={index}
+              className={`experience-card relative flex flex-col md:flex-row gap-8 ${
+              index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`
+              }>
+
                 {/* Timeline dot */}
                 <div className="absolute left-8 md:left-1/2 top-8 -translate-x-1/2 w-6 h-6 rounded-full bg-primary border-4 border-background shadow-lg shadow-primary/50 z-10 hidden sm:block">
                   <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-75" />
@@ -156,17 +156,17 @@ export default function Experience() {
 
                 {/* Card Content */}
                 <Card
-                  className={`flex-1 bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 relative overflow-hidden group ${
-                    index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'
-                  }`}
-                >
+                className={`flex-1 bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 relative overflow-hidden group ${
+                index % 2 === 0 ? 'md:mr-8' : 'md:ml-8'}`
+                }>
+
                   {/* Current badge */}
-                  {exp.current && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary flex items-center gap-1 z-10">
+                  {exp.current &&
+                <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary flex items-center gap-1 z-10">
                       <div className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
                       Current
                     </div>
-                  )}
+                }
 
                   {/* Gradient background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -176,15 +176,15 @@ export default function Experience() {
                       {/* Icon section */}
                       <div className="flex-shrink-0">
                         <div className={`p-4 rounded-2xl border-2 transition-all duration-500 ${
-                          exp.type === 'education'
-                            ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500/20 group-hover:border-blue-500/40'
-                            : 'bg-primary/10 border-primary/20 text-primary group-hover:bg-primary/20 group-hover:border-primary/40'
-                        }`}>
-                          {exp.type === 'education' ? (
-                            <GraduationCap className="w-8 h-8" />
-                          ) : (
-                            <Briefcase className="w-8 h-8" />
-                          )}
+                      exp.type === 'education' ?
+                      'bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500/20 group-hover:border-blue-500/40' :
+                      'bg-primary/10 border-primary/20 text-primary group-hover:bg-primary/20 group-hover:border-primary/40'}`
+                      }>
+                          {exp.type === 'education' ?
+                        <GraduationCap className="w-8 h-8" /> :
+
+                        <Briefcase className="w-8 h-8" />
+                        }
                         </div>
                       </div>
 
@@ -215,17 +215,17 @@ export default function Experience() {
 
                         {/* Highlights */}
                         <div className="space-y-2 pt-2">
-                          {exp.highlights.map((highlight, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-start gap-3 text-sm group/item"
-                            >
+                          {exp.highlights.map((highlight, idx) =>
+                        <div
+                          key={idx}
+                          className="flex items-start gap-3 text-sm group/item">
+
                               <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary group-hover/item:scale-150 transition-transform" />
                               <span className="text-foreground/90 leading-relaxed">
                                 {highlight}
                               </span>
                             </div>
-                          ))}
+                        )}
                         </div>
                       </div>
                     </div>
@@ -235,10 +235,10 @@ export default function Experience() {
                   <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-tl-full" />
                 </Card>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
