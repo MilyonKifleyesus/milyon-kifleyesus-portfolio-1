@@ -90,6 +90,7 @@ export default function Projects() {
           trigger: projectsContainerRef.current,
           start: 'top top',
           end: 'bottom bottom',
+          scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
             const cardProgress = progress * (cards.length - 1);
@@ -102,7 +103,8 @@ export default function Projects() {
                 opacity: 1 - cardLocalProgress,
                 y: -100 * cardLocalProgress,
                 scale: 1 - 0.1 * cardLocalProgress,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
               setCurrentProjectIndex(index);
             } else if (index === cardIndex + 1) {
@@ -111,7 +113,8 @@ export default function Projects() {
                 opacity: cardLocalProgress,
                 y: 100 * (1 - cardLocalProgress),
                 scale: 0.9 + 0.1 * cardLocalProgress,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             } else if (index < cardIndex) {
               // Cards above - keep them faded out and up
@@ -119,7 +122,8 @@ export default function Projects() {
                 opacity: 0,
                 y: -100,
                 scale: 0.9,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             } else {
               // Cards below - keep them faded out and down
@@ -127,7 +131,8 @@ export default function Projects() {
                 opacity: 0,
                 y: 100,
                 scale: 0.9,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             }
           }

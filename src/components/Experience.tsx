@@ -97,6 +97,7 @@ export default function Experience() {
           trigger: experienceContainerRef.current,
           start: 'top top',
           end: 'bottom bottom',
+          scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
             const cardProgress = progress * (cards.length - 1);
@@ -110,7 +111,8 @@ export default function Experience() {
                 opacity: 1 - cardLocalProgress,
                 x: direction * -100 * cardLocalProgress,
                 scale: 1 - 0.1 * cardLocalProgress,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
               setCurrentExpIndex(index);
             } else if (index === cardIndex + 1) {
@@ -120,7 +122,8 @@ export default function Experience() {
                 opacity: cardLocalProgress,
                 x: direction * 100 * (1 - cardLocalProgress),
                 scale: 0.9 + 0.1 * cardLocalProgress,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             } else if (index < cardIndex) {
               // Cards above - keep them faded out
@@ -129,7 +132,8 @@ export default function Experience() {
                 opacity: 0,
                 x: direction * -100,
                 scale: 0.9,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             } else {
               // Cards below - keep them faded out
@@ -138,7 +142,8 @@ export default function Experience() {
                 opacity: 0,
                 x: direction * 100,
                 scale: 0.9,
-                duration: 0.3
+                duration: 0.5,
+                ease: 'power2.out'
               });
             }
           }
@@ -151,13 +156,14 @@ export default function Experience() {
           trigger: experienceContainerRef.current,
           start: 'top top',
           end: 'bottom bottom',
+          scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
             if (timelineRef.current) {
               gsap.to(timelineRef.current, {
                 scaleY: progress,
-                duration: 0.3,
-                ease: 'none'
+                duration: 0.5,
+                ease: 'power2.out'
               });
             }
           }
