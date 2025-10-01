@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
@@ -48,35 +48,35 @@ export default function Services() {
   }, []);
 
   const services = [
-    {
-      icon: <Globe className="w-10 h-10" />,
-      title: 'Web Development',
-      description: 'Building modern, responsive websites and web applications using cutting-edge technologies and best practices.',
-      features: ['Responsive Design', 'Progressive Web Apps', 'Single Page Applications', 'E-commerce Solutions'],
-      gradient: 'from-primary/20 via-primary/10 to-transparent'
-    },
-    {
-      icon: <Database className="w-10 h-10" />,
-      title: 'Database Design',
-      description: 'Designing and implementing efficient, scalable database solutions optimized for your application needs.',
-      features: ['Schema Design', 'Query Optimization', 'Data Migration', 'Security & Recovery'],
-      gradient: 'from-primary/20 via-primary/10 to-transparent'
-    },
-    {
-      icon: <Palette className="w-10 h-10" />,
-      title: 'UI/UX Design',
-      description: 'Creating intuitive and visually appealing user interfaces that enhance user experience and engagement.',
-      features: ['User Research', 'Prototyping', 'Visual Design', 'Usability Testing'],
-      gradient: 'from-primary/20 via-primary/10 to-transparent'
-    },
-    {
-      icon: <ClipboardList className="w-10 h-10" />,
-      title: 'Project Management',
-      description: 'Leading development projects from conception to deployment with agile methodologies and best practices.',
-      features: ['Agile/Scrum', 'Sprint Planning', 'Team Collaboration', 'Quality Assurance'],
-      gradient: 'from-primary/20 via-primary/10 to-transparent'
-    }
-  ];
+  {
+    icon: <Globe className="w-10 h-10" />,
+    title: 'Web Development',
+    description: 'Building modern, responsive websites and web applications using cutting-edge technologies and best practices.',
+    features: ['Responsive Design', 'Progressive Web Apps', 'Single Page Applications', 'E-commerce Solutions'],
+    gradient: 'from-primary/20 via-primary/10 to-transparent'
+  },
+  {
+    icon: <Database className="w-10 h-10" />,
+    title: 'Database Design',
+    description: 'Designing and implementing efficient, scalable database solutions optimized for your application needs.',
+    features: ['Schema Design', 'Query Optimization', 'Data Migration', 'Security & Recovery'],
+    gradient: 'from-primary/20 via-primary/10 to-transparent'
+  },
+  {
+    icon: <Palette className="w-10 h-10" />,
+    title: 'UI/UX Design',
+    description: 'Creating intuitive and visually appealing user interfaces that enhance user experience and engagement.',
+    features: ['User Research', 'Prototyping', 'Visual Design', 'Usability Testing'],
+    gradient: 'from-primary/20 via-primary/10 to-transparent'
+  },
+  {
+    icon: <ClipboardList className="w-10 h-10" />,
+    title: 'Project Management',
+    description: 'Leading development projects from conception to deployment with agile methodologies and best practices.',
+    features: ['Agile/Scrum', 'Sprint Planning', 'Team Collaboration', 'Quality Assurance'],
+    gradient: 'from-primary/20 via-primary/10 to-transparent'
+  }];
+
 
   return (
     <section ref={sectionRef} id="services" className="py-20 px-4 bg-background relative overflow-hidden">
@@ -97,12 +97,12 @@ export default function Services() {
           </p>
         </div>
 
-        <div ref={servicesGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <Card
-              key={index}
-              className="group bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden relative"
-            >
+        <div ref={servicesGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 !opacity-100">
+          {services.map((service, index) =>
+          <Card
+            key={index}
+            className="group bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden relative">
+
               {/* Animated gradient background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
               
@@ -125,12 +125,12 @@ export default function Services() {
                   
                   {/* Features list */}
                   <ul className="space-y-2 pt-2">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
+                    {service.features.map((feature, idx) =>
+                  <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
                         <div className="w-1 h-1 rounded-full bg-primary mt-1.5 group-hover:scale-150 transition-transform" />
                         <span>{feature}</span>
                       </li>
-                    ))}
+                  )}
                   </ul>
                 </div>
 
@@ -141,7 +141,7 @@ export default function Services() {
                 </div>
               </div>
             </Card>
-          ))}
+          )}
         </div>
 
         {/* CTA Section */}
@@ -161,6 +161,6 @@ export default function Services() {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
