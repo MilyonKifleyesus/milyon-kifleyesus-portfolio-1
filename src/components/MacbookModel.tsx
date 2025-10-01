@@ -1,109 +1,16 @@
 "use client";
 
 import * as THREE from 'three';
-import React, { Suspense, useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, ContactShadows, useGLTF } from '@react-three/drei';
+import { Environment, ContactShadows } from '@react-three/drei';
 
 interface MacBookProps {
   open: boolean;
   onClick: () => void;
 }
 
-function MacBook({ open, onClick }: MacBookProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/mac-draco.glb') as any;
-
-  // Clone the scene to avoid shared state between instances
-  const clonedScene = React.useMemo(() => scene.clone(), [scene]);
-
-  // References for lid animation
-  const lidRef = useRef<THREE.Group | THREE.Mesh | null>(null);
-  const targetRotation = useRef(0);
-  const currentRotation = useRef(0);
-
-  // Find and cache the lid mesh on mount
-  useEffect(() => {
-    if (!clonedScene) return;
-
-    // Common naming patterns for laptop lid/screen in 3D models
-    const lidNames = ['top', 'lid', 'screen', 'display', 'Top', 'Lid', 'Screen', 'Display', 'matte'];
-
-    clonedScene.traverse((child: any) => {
-      if (child.isMesh || child.isGroup) {
-        const childName = (child.name || '').toLowerCase();
-
-        // Check if this is the lid based on common naming patterns
-        if (lidNames.some(name => childName.includes(name.toLowerCase()))) {
-          lidRef.current = child;
-          // Store original rotation for reference
-          if (!child.userData.originalRotation) {
-            child.userData.originalRotation = child.rotation.x;
-          }
-        }
-      }
-    });
-  }, [clonedScene]);
-
-  // Update target rotation when open state changes
-  useEffect(() => {
-    // Lid opens to approximately 72 degrees
-    targetRotation.current = open ? -Math.PI * 0.4 : 0;
-  }, [open]);
-
-  // Animation loop
-  useFrame((state, delta) => {
-    if (!groupRef.current) return;
-    const t = state.clock.getElapsedTime();
-
-    // Subtle floating animation
-    groupRef.current.position.y = Math.sin(t * 0.5) * 0.08;
-    groupRef.current.rotation.y = Math.sin(t * 0.3) * 0.04;
-
-    // Smooth lid rotation using lerp
-    if (lidRef.current) {
-      const lerpSpeed = 3.5;
-      currentRotation.current = THREE.MathUtils.lerp(
-        currentRotation.current,
-        targetRotation.current,
-        Math.min(delta * lerpSpeed, 1)
-      );
-
-      // Apply rotation relative to original position
-      const originalRot = lidRef.current.userData.originalRotation || 0;
-      lidRef.current.rotation.x = originalRot + currentRotation.current;
-    }
-  });
-
-  return (
-    <group
-      ref={groupRef}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      onPointerOver={() => {
-        if (typeof document !== 'undefined') {
-          document.body.style.cursor = 'pointer';
-        }
-      }}
-      onPointerOut={() => {
-        if (typeof document !== 'undefined') {
-          document.body.style.cursor = 'auto';
-        }
-      }}
-    >
-      <primitive
-        object={clonedScene}
-        scale={2.5}
-        position={[0, -1.5, 0]}
-        rotation={[0, 0, 0]}
-      />
-    </group>
-  );
-}
-
-function FallbackBox({ open }: { open: boolean }) {
+function FallbackBox({ open, onClick }: MacBookProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
   const lidRef = useRef<THREE.Mesh>(null);
@@ -133,14 +40,30 @@ function FallbackBox({ open }: { open: boolean }) {
       lidRef.current.rotation.x = currentRotation.current;
 
       // Update position based on rotation
-      const progress = currentRotation.current / targetRotation.current || 0;
+      const progress = Math.abs(currentRotation.current / (targetRotation.current || 1));
       lidRef.current.position.y = -1.4 + progress * 1.4;
       lidRef.current.position.z = -1.5 + progress * 0.2;
     }
   });
 
   return (
-    <group ref={groupRef}>
+    <group
+      ref={groupRef}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      onPointerOver={() => {
+        if (typeof document !== 'undefined') {
+          document.body.style.cursor = 'pointer';
+        }
+      }}
+      onPointerOut={() => {
+        if (typeof document !== 'undefined') {
+          document.body.style.cursor = 'auto';
+        }
+      }}
+    >
       {/* Laptop base */}
       <mesh ref={meshRef} position={[0, -1.5, 0]}>
         <boxGeometry args={[4, 0.15, 3]} />
@@ -179,66 +102,6 @@ function FallbackBox({ open }: { open: boolean }) {
   );
 }
 
-function ModelWithFallback({ open, onClick }: MacBookProps) {
-  const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Try to preload the model
-    const loadModel = async () => {
-      try {
-        await useGLTF.preload('/mac-draco.glb');
-        setIsLoading(false);
-      } catch (error) {
-        console.warn('Failed to load 3D model, using fallback:', error);
-        setHasError(true);
-        setIsLoading(false);
-      }
-    };
-
-    loadModel();
-  }, []);
-
-  if (hasError) {
-    return <FallbackBox open={open} />;
-  }
-
-  return (
-    <Suspense fallback={<FallbackBox open={open} />}>
-      <ErrorBoundary onError={() => setHasError(true)}>
-        <MacBook open={open} onClick={onClick} />
-      </ErrorBoundary>
-    </Suspense>
-  );
-}
-
-// Error boundary for catching 3D model loading errors
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode; onError: () => void },
-  { hasError: boolean }
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error) {
-    console.warn('3D Model Error:', error.message);
-    this.props.onError();
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return null;
-    }
-    return this.props.children;
-  }
-}
-
 export default function MacbookModel() {
   const [open, setOpen] = React.useState(false);
 
@@ -267,12 +130,8 @@ export default function MacbookModel() {
         />
         <ambientLight intensity={0.4} />
 
-        <Suspense fallback={null}>
-          <group onClick={() => setOpen(!open)}>
-            <ModelWithFallback open={open} onClick={() => setOpen(!open)} />
-          </group>
-          <Environment preset="city" />
-        </Suspense>
+        <FallbackBox open={open} onClick={() => setOpen(!open)} />
+        <Environment preset="city" />
 
         <ContactShadows
           position={[0, -2.5, 0]}
@@ -301,9 +160,4 @@ export default function MacbookModel() {
       </div>
     </div>
   );
-}
-
-// Preload on module import
-if (typeof window !== 'undefined') {
-  useGLTF.preload('/mac-draco.glb');
 }
