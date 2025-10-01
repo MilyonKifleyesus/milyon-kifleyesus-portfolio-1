@@ -243,7 +243,7 @@ export default function Projects() {
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 !bg-[url(https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/dedc825e-0e65-4342-9b2e-34dddedf0dab/visual-edit-uploads/1759348428366-gm02skqo3ot.png)] !bg-cover !bg-center" />
               </div>
 
-              <div className="p-6 space-y-4 relative">
+              <div className="p-6 space-y-4 relative !bg-transparent">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
                     {project.title}
