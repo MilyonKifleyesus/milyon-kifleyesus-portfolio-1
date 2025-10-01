@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, Sparkles } from 'lucide-react';
+import { ExternalLink, Github, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,75 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const projectsGridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Heading animation
-      gsap.from(headingRef.current, {
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
-
-      // Projects grid stagger animation
-      gsap.from(projectsGridRef.current?.children || [], {
-        scrollTrigger: {
-          trigger: projectsGridRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 80,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power3.out'
-      });
-
-      // Project cards interactive hover
-      const projectCards = projectsGridRef.current?.querySelectorAll('.project-card');
-      projectCards?.forEach((card) => {
-        const image = card.querySelector('.project-image');
-        const content = card.querySelector('.project-content');
-        
-        card.addEventListener('mouseenter', () => {
-          gsap.to(image, {
-            scale: 1.1,
-            duration: 0.5,
-            ease: 'power2.out'
-          });
-          gsap.to(content, {
-            y: -5,
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-        });
-        
-        card.addEventListener('mouseleave', () => {
-          gsap.to(image, {
-            scale: 1,
-            duration: 0.5,
-            ease: 'power2.out'
-          });
-          gsap.to(content, {
-            y: 0,
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  const projectsContainerRef = useRef<HTMLDivElement>(null);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
 
   const projects = [
     {
@@ -122,13 +55,72 @@ export default function Projects() {
     },
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Heading animation
+      gsap.from(headingRef.current, {
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse'
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Handle scroll to track current project
+  useEffect(() => {
+    const container = projectsContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const scrollTop = container.scrollTop;
+      const itemHeight = container.scrollHeight / projects.length;
+      const index = Math.round(scrollTop / itemHeight);
+      setCurrentProjectIndex(Math.max(0, Math.min(index, projects.length - 1)));
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [projects.length]);
+
+  const scrollToProject = (index: number) => {
+    const container = projectsContainerRef.current;
+    if (!container) return;
+    
+    const itemHeight = container.scrollHeight / projects.length;
+    container.scrollTo({
+      top: itemHeight * index,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleNext = () => {
+    if (currentProjectIndex < projects.length - 1) {
+      scrollToProject(currentProjectIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentProjectIndex > 0) {
+      scrollToProject(currentProjectIndex - 1);
+    }
+  };
+
   return (
     <section ref={sectionRef} id="projects" className="py-20 px-4 bg-secondary/20 relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div ref={headingRef} className="space-y-4 mb-16 text-center">
+        <div ref={headingRef} className="space-y-4 mb-12 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm font-medium text-primary mb-4">
             <Sparkles className="w-4 h-4" />
             Portfolio
@@ -139,84 +131,139 @@ export default function Projects() {
           </p>
         </div>
 
-        <div ref={projectsGridRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <Card 
-              key={index}
-              className="project-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden group relative"
+        <div className="relative">
+          {/* Vertical scroll container */}
+          <div 
+            ref={projectsContainerRef}
+            className="h-[600px] overflow-y-scroll scroll-smooth snap-y snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
+            {projects.map((project, index) => (
+              <div 
+                key={index}
+                className="h-[600px] snap-start snap-always flex items-center justify-center p-4"
+              >
+                <Card 
+                  className="project-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden group relative max-w-4xl w-full"
+                >
+                  {/* Featured badge */}
+                  {project.featured && (
+                    <div className="absolute top-6 right-6 z-20 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary">
+                      Featured
+                    </div>
+                  )}
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Image container */}
+                    <div className="relative h-64 md:h-full overflow-hidden">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="project-image object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent opacity-80" />
+                      
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+                    
+                    <div className="project-content p-6 md:p-8 space-y-4 relative flex flex-col justify-center">
+                      <h3 className="text-3xl md:text-4xl font-bold group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {project.description}
+                      </p>
+                      
+                      {/* Tech stack */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {project.tech.map((tech, idx) => (
+                          <span 
+                            key={idx}
+                            className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-lg text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex gap-3 pt-4">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          asChild
+                          className="flex-1 border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all group/btn"
+                        >
+                          <a href={project.github} target="_blank" rel="noopener noreferrer">
+                            <Github className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
+                            Code
+                          </a>
+                        </Button>
+                        <Button 
+                          size="sm"
+                          asChild
+                          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground group/btn"
+                        >
+                          <a href={project.live} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                            Live Demo
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Corner accent */}
+                  <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-tl-full" />
+                </Card>
+              </div>
+            ))}
+          </div>
+
+          {/* Navigation controls */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-20">
+            <button
+              onClick={handlePrev}
+              disabled={currentProjectIndex === 0}
+              className="p-3 bg-card/80 backdrop-blur-sm border border-border rounded-full hover:bg-primary hover:border-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 group"
             >
-              {/* Featured badge */}
-              {project.featured && (
-                <div className="absolute top-4 right-4 z-20 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary">
-                  Featured
-                </div>
-              )}
-
-              {/* Image container */}
-              <div className="relative h-56 overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="project-image object-cover"
+              <ChevronUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+            </button>
+            
+            {/* Progress indicator */}
+            <div className="flex flex-col gap-2 py-2">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollToProject(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === currentProjectIndex 
+                      ? 'bg-primary h-8' 
+                      : 'bg-border hover:bg-primary/50'
+                  }`}
+                  aria-label={`Go to project ${index + 1}`}
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent opacity-80" />
-                
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              
-              <div className="project-content p-6 space-y-4 relative">
-                <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {project.description}
-                </p>
-                
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {project.tech.map((tech, idx) => (
-                    <span 
-                      key={idx}
-                      className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-lg text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+              ))}
+            </div>
 
-                {/* Action buttons */}
-                <div className="flex gap-3 pt-4">
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    asChild
-                    className="flex-1 border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all group/btn"
-                  >
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
-                      Code
-                    </a>
-                  </Button>
-                  <Button 
-                    size="sm"
-                    asChild
-                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground group/btn"
-                  >
-                    <a href={project.live} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                      Live Demo
-                    </a>
-                  </Button>
-                </div>
-              </div>
+            <button
+              onClick={handleNext}
+              disabled={currentProjectIndex === projects.length - 1}
+              className="p-3 bg-card/80 backdrop-blur-sm border border-border rounded-full hover:bg-primary hover:border-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 group"
+            >
+              <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+            </button>
+          </div>
 
-              {/* Corner accent */}
-              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-tl-full" />
-            </Card>
-          ))}
+          {/* Scroll hint (only visible for first project) */}
+          {currentProjectIndex === 0 && (
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground animate-bounce">
+              <span className="text-sm">Scroll to explore</span>
+              <ChevronDown className="w-4 h-4" />
+            </div>
+          )}
         </div>
       </div>
     </section>
