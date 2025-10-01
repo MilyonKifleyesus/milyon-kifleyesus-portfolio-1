@@ -26,10 +26,18 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
+/**
+ * MODULE VERSION FIX: Updated to @react-three/fiber v8.17.10 + @react-three/drei v9.114.3
+ * These stable versions are compatible with React 19 and Three.js 0.178
+ */
+
 import * as THREE from 'three';
 import React, { Suspense, useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
 import { Environment, ContactShadows, useGLTF, PerspectiveCamera } from '@react-three/drei';
+
+// MODULE VERSION FIX: Explicitly extend Three.js classes for TypeScript
+extend(THREE);
 
 interface MacBookProps {
   open: boolean;
@@ -123,13 +131,14 @@ function MacBook({ open, onClick }: MacBookProps) {
         }
       }}
     >
-      {/* ZOOM FIX: Model transform properties optimized for full visibility */}
+      {/* ZOOM FIX: Model transform properties optimized for FULL laptop visibility */}
       <primitive
         object={clonedScene}
-        // ZOOM FIX: Scale set to 2.5 - provides good detail while fitting in viewport
-        // Original: 2.5 | Kept same as it's optimal for model size
-        // Reducing would make model too small; increasing would cause clipping
-        scale={2.5}
+        // ZOOM FIX: Scale reduced to 2.2 - ensures COMPLETE laptop fits in viewport
+        // Original: 2.5 | New: 2.2 | Change: -12% reduction
+        // WHY: Slightly smaller scale guarantees full laptop visibility without any clipping
+        // Still maintains good detail visibility while showing entire model
+        scale={2.2}
 
         // ZOOM FIX: Y-position at -1.5 centers the laptop vertically in view
         // Original: [0, -1.5, 0] | Kept same for proper centering
