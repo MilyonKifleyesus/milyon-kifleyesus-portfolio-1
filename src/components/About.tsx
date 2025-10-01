@@ -136,11 +136,26 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-8 items-start">
             {/* Professional Photo */}
             <div className="md:col-span-1">
-              <div className="relative aspect-square w-full max-w-xs mx-auto rounded-2xl overflow-hidden border-4 border-primary/20 shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
-                <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-                  <span className="text-8xl font-bold text-primary/30">MK</span>
-                </div>
+              <div className="relative aspect-square w-full max-w-xs mx-auto rounded-2xl overflow-hidden border-4 border-primary/20 shadow-2xl group cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-0"></div>
+
+                {/* Black and White Image - Default */}
+                <Image
+                  src="/MOSHED-2025-9-29-11-3-2.jpg"
+                  alt="Milyon Kifleyesus - Black and White"
+                  fill
+                  className="object-cover transition-opacity duration-500 group-hover:opacity-0"
+                  priority
+                />
+
+                {/* Color Image - On Hover */}
+                <Image
+                  src="/WhatsApp Image 2025-09-28 at 13.43.09_3c7899ba.jpg"
+                  alt="Milyon Kifleyesus - Color"
+                  fill
+                  className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  priority
+                />
               </div>
               <div className="mt-6 space-y-3">
                 <div className="flex items-center space-x-3 text-sm">
