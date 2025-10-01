@@ -168,32 +168,6 @@ export default function Experience() {
     return () => ctx.revert();
   }, []);
 
-  const scrollToExperience = (index: number) => {
-    const container = experienceContainerRef.current;
-    if (!container) return;
-    
-    const scrollHeight = container.offsetHeight;
-    const totalScroll = scrollHeight * experiences.length;
-    const targetScroll = (totalScroll / experiences.length) * index;
-    
-    window.scrollTo({
-      top: container.offsetTop + targetScroll,
-      behavior: 'smooth'
-    });
-  };
-
-  const handleNext = () => {
-    if (currentExpIndex < experiences.length - 1) {
-      scrollToExperience(currentExpIndex + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentExpIndex > 0) {
-      scrollToExperience(currentExpIndex - 1);
-    }
-  };
-
   return (
     <section ref={sectionRef} id="experience" className="py-20 px-4 bg-background relative overflow-hidden">
       {/* Background decorative elements */}
@@ -242,7 +216,7 @@ export default function Experience() {
                     </div>
                     
                     <Card 
-                      className={`exp-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 cursor-pointer relative overflow-hidden group w-full ${
+                      className={`exp-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 relative overflow-hidden group w-full ${
                         index % 2 === 0 ? 'lg:-translate-x-[3rem]' : 'lg:translate-x-[3rem]'
                       }`}
                     >
@@ -325,51 +299,6 @@ export default function Experience() {
               </div>
             </div>
           </div>
-
-          {/* Navigation controls */}
-          <div className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-50">
-            <button
-              onClick={handlePrev}
-              disabled={currentExpIndex === 0}
-              className="p-3 bg-card/80 backdrop-blur-sm border border-border rounded-full hover:bg-primary hover:border-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 group"
-              aria-label="Previous experience"
-            >
-              <ChevronUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
-            
-            {/* Progress indicator */}
-            <div className="flex flex-col gap-2 py-2">
-              {experiences.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => scrollToExperience(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentExpIndex 
-                      ? 'bg-primary h-8' 
-                      : 'bg-border hover:bg-primary/50'
-                  }`}
-                  aria-label={`Go to experience ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNext}
-              disabled={currentExpIndex === experiences.length - 1}
-              className="p-3 bg-card/80 backdrop-blur-sm border border-border rounded-full hover:bg-primary hover:border-primary hover:text-primary-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-300 group"
-              aria-label="Next experience"
-            >
-              <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
-            </button>
-          </div>
-
-          {/* Scroll hint */}
-          {currentExpIndex === 0 && (
-            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground animate-bounce z-40">
-              <span className="text-sm">Scroll to explore timeline</span>
-              <ChevronDown className="w-4 h-4" />
-            </div>
-          )}
         </div>
       </div>
     </section>
