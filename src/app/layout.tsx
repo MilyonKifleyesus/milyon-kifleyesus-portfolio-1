@@ -7,6 +7,9 @@ import Script from "next/script";
 export const metadata: Metadata = {
   title: "Milyon Kifleyesus - Software Developer Portfolio",
   description: "Portfolio website of Milyon Kifleyesus, an aspiring Software Developer and Software Engineering Technology Co-op student at Centennial College, Toronto.",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({

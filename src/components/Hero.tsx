@@ -99,6 +99,9 @@ export default function Hero() {
               <button onClick={() => scrollToSection('about')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 About
               </button>
+              <button onClick={() => scrollToSection('services')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+                Services
+              </button>
               <button onClick={() => scrollToSection('projects')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 Projects
               </button>

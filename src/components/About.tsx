@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
-import { Code2, Database, Globe, Palette } from 'lucide-react';
+import { Code as Code2, Database, Globe, Palette, Award, BookOpen } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -130,24 +131,59 @@ export default function About() {
           </p>
         </div>
 
-        {/* About Content */}
-        <Card ref={cardRef} className="bg-card border-border p-8 mb-12">
-          <div className="space-y-6 text-lg leading-relaxed">
-            <p className="text-foreground">
-              I'm currently pursuing a <strong className="text-primary">Software Engineering Technology (Co-op)</strong> degree 
-              at <strong className="text-primary">Centennial College, Toronto</strong>, with an expected graduation in <strong>2027</strong>.
-            </p>
-            <p className="text-muted-foreground">
-              My journey in software development started with a curiosity about how things work behind the scenes. 
-              Since then, I've been building projects that solve real-world problems, from web applications to 
-              database-driven systems. I'm particularly interested in full-stack development and creating user-centric 
-              applications.
-            </p>
-            <p className="text-muted-foreground">
-              When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, 
-              or learning about the latest developments in AI and cloud computing. I'm always eager to take on new 
-              challenges and collaborate with fellow developers.
-            </p>
+        {/* About Content with Photo */}
+        <Card ref={cardRef} className="bg-card border-border p-8 mb-12 overflow-hidden">
+          <div className="grid md:grid-cols-3 gap-8 items-start">
+            {/* Professional Photo */}
+            <div className="md:col-span-1">
+              <div className="relative aspect-square w-full max-w-xs mx-auto rounded-2xl overflow-hidden border-4 border-primary/20 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent z-10"></div>
+                <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+                  <span className="text-8xl font-bold text-primary/30">MK</span>
+                </div>
+              </div>
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center space-x-3 text-sm">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <span className="text-muted-foreground">Centennial College</span>
+                </div>
+                <div className="flex items-center space-x-3 text-sm">
+                  <Award className="w-5 h-5 text-primary" />
+                  <span className="text-muted-foreground">Software Engineering</span>
+                </div>
+              </div>
+            </div>
+
+            {/* About Text */}
+            <div className="md:col-span-2 space-y-6 text-lg leading-relaxed">
+              <p className="text-foreground">
+                I'm currently pursuing a <strong className="text-primary">Software Engineering Technology (Co-op)</strong> degree
+                at <strong className="text-primary">Centennial College, Toronto</strong>, with an expected graduation in <strong>2027</strong>.
+              </p>
+              <p className="text-muted-foreground">
+                My journey in software development started with a curiosity about how things work behind the scenes.
+                Since then, I've been building projects that solve real-world problems, from web applications to
+                database-driven systems. I'm particularly interested in full-stack development and creating user-centric
+                applications.
+              </p>
+              <p className="text-muted-foreground">
+                When I'm not coding, you can find me exploring new technologies, contributing to open-source projects,
+                or learning about the latest developments in AI and cloud computing. I'm always eager to take on new
+                challenges and collaborate with fellow developers.
+              </p>
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div className="p-4 bg-secondary/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-primary">10+</div>
+                  <div className="text-sm text-muted-foreground">Projects Completed</div>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg border border-border">
+                  <div className="text-3xl font-bold text-primary">15+</div>
+                  <div className="text-sm text-muted-foreground">Technologies</div>
+                </div>
+              </div>
+            </div>
           </div>
         </Card>
 
