@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
@@ -105,10 +105,10 @@ export default function Contact() {
     setSubmitStatus('idle');
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
-      
+
       // Animate success message
       gsap.from('.success-message', {
         scale: 0.8,
@@ -125,25 +125,25 @@ export default function Contact() {
   };
 
   const contactInfo = [
-    {
-      icon: <Mail className="w-5 h-5" />,
-      label: 'Email',
-      value: 'milyon.kifle@example.com',
-      href: 'mailto:milyon.kifle@example.com'
-    },
-    {
-      icon: <Phone className="w-5 h-5" />,
-      label: 'Phone',
-      value: '+1 (416) 555-0123',
-      href: 'tel:+14165550123'
-    },
-    {
-      icon: <MapPin className="w-5 h-5" />,
-      label: 'Location',
-      value: 'Toronto, ON, Canada',
-      href: null
-    }
-  ];
+  {
+    icon: <Mail className="w-5 h-5" />,
+    label: 'Email',
+    value: "",
+    href: 'mailto:milyon.kifle@example.com'
+  },
+  {
+    icon: <Phone className="w-5 h-5" />,
+    label: 'Phone',
+    value: '+1 (416) 555-0123',
+    href: 'tel:+14165550123'
+  },
+  {
+    icon: <MapPin className="w-5 h-5" />,
+    label: 'Location',
+    value: 'Toronto, ON, Canada',
+    href: null
+  }];
+
 
   return (
     <section ref={sectionRef} id="contact" className="py-20 px-4 bg-secondary/30">
@@ -161,26 +161,26 @@ export default function Contact() {
             <Card className="bg-card border-border p-6">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start gap-4">
+                {contactInfo.map((info, index) =>
+                <div key={index} className="flex items-start gap-4">
                     <div className="p-3 bg-primary/10 rounded-lg text-primary flex-shrink-0">
                       {info.icon}
                     </div>
                     <div className="flex-1">
                       <p className="text-sm text-muted-foreground">{info.label}</p>
-                      {info.href ? (
-                        <a 
-                          href={info.href}
-                          className="text-foreground font-medium hover:text-primary transition-colors"
-                        >
+                      {info.href ?
+                    <a
+                      href={info.href}
+                      className="text-foreground font-medium hover:text-primary transition-colors !whitespace-pre-line">
+
                           {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-foreground font-medium">{info.value}</p>
-                      )}
+                        </a> :
+
+                    <p className="text-foreground font-medium">{info.value}</p>
+                    }
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             </Card>
 
@@ -207,8 +207,8 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className="bg-background border-border"
-                  />
+                    className="bg-background border-border" />
+
                 </div>
                 <div className="form-field space-y-2">
                   <Label htmlFor="email">Email *</Label>
@@ -220,8 +220,8 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className="bg-background border-border"
-                  />
+                    className="bg-background border-border" />
+
                 </div>
               </div>
 
@@ -235,8 +235,8 @@ export default function Contact() {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder="Project Inquiry"
-                  className="bg-background border-border"
-                />
+                  className="bg-background border-border" />
+
               </div>
 
               <div className="form-field space-y-2">
@@ -249,46 +249,46 @@ export default function Contact() {
                   onChange={handleChange}
                   placeholder="Tell me about your project..."
                   rows={6}
-                  className="bg-background border-border resize-none"
-                />
+                  className="bg-background border-border resize-none" />
+
               </div>
 
-              {submitStatus === 'success' && (
-                <div className="success-message flex items-center gap-2 text-green-500 bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+              {submitStatus === 'success' &&
+              <div className="success-message flex items-center gap-2 text-green-500 bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                   <CheckCircle className="w-5 h-5 flex-shrink-0" />
                   <p className="text-sm">Message sent successfully! I'll get back to you soon.</p>
                 </div>
-              )}
+              }
 
-              {submitStatus === 'error' && (
-                <div className="flex items-center gap-2 text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+              {submitStatus === 'error' &&
+              <div className="flex items-center gap-2 text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-4">
                   <XCircle className="w-5 h-5 flex-shrink-0" />
                   <p className="text-sm">Failed to send message. Please try again or email me directly.</p>
                 </div>
-              )}
+              }
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 size="lg"
                 disabled={isSubmitting}
-                className="form-field w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold hover:scale-105 transition-transform"
-              >
-                {isSubmitting ? (
-                  <>
+                className="form-field w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold hover:scale-105 transition-transform">
+
+                {isSubmitting ?
+                <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Sending...
-                  </>
-                ) : (
-                  <>
+                  </> :
+
+                <>
                     <Send className="w-4 h-4 mr-2" />
                     Send Message
                   </>
-                )}
+                }
               </Button>
             </form>
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
