@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -91,6 +91,7 @@ export default function Projects() {
       tech: ['Next.js', 'TypeScript', 'PostgreSQL', 'Stripe', 'Tailwind CSS'],
       github: 'https://github.com/milyonkifle/ecommerce-platform',
       live: 'https://ecommerce-demo.vercel.app',
+      featured: true
     },
     {
       title: 'Task Management System',
@@ -99,6 +100,7 @@ export default function Projects() {
       tech: ['React', 'Node.js', 'MongoDB', 'Socket.io', 'Express'],
       github: 'https://github.com/milyonkifle/task-manager',
       live: 'https://task-manager-demo.vercel.app',
+      featured: true
     },
     {
       title: 'Weather Dashboard',
@@ -107,6 +109,7 @@ export default function Projects() {
       tech: ['React', 'TypeScript', 'OpenWeather API', 'Chart.js', 'CSS3'],
       github: 'https://github.com/milyonkifle/weather-dashboard',
       live: 'https://weather-dashboard-demo.vercel.app',
+      featured: false
     },
     {
       title: 'Social Media Analytics',
@@ -115,15 +118,23 @@ export default function Projects() {
       tech: ['Python', 'Django', 'PostgreSQL', 'D3.js', 'REST API'],
       github: 'https://github.com/milyonkifle/social-analytics',
       live: 'https://social-analytics-demo.vercel.app',
+      featured: false
     },
   ];
 
   return (
-    <section ref={sectionRef} id="projects" className="py-20 px-4 bg-secondary/30">
-      <div className="max-w-7xl mx-auto">
-        <div ref={headingRef} className="space-y-4 mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold">Featured Projects</h2>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+    <section ref={sectionRef} id="projects" className="py-20 px-4 bg-secondary/20 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div ref={headingRef} className="space-y-4 mb-16 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm font-medium text-primary mb-4">
+            <Sparkles className="w-4 h-4" />
+            Portfolio
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold gradient-text">Featured Projects</h2>
+          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
             A showcase of my recent work and personal projects demonstrating various technical skills
           </p>
         </div>
@@ -132,59 +143,78 @@ export default function Projects() {
           {projects.map((project, index) => (
             <Card 
               key={index}
-              className="project-card bg-card border-border overflow-hidden hover:border-primary/50 transition-all duration-300 group cursor-pointer"
+              className="project-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden group relative"
             >
-              <div className="relative h-48 overflow-hidden">
+              {/* Featured badge */}
+              {project.featured && (
+                <div className="absolute top-4 right-4 z-20 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary">
+                  Featured
+                </div>
+              )}
+
+              {/* Image container */}
+              <div className="relative h-56 overflow-hidden">
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
                   className="project-image object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-60" />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent opacity-80" />
+                
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
               
-              <div className="project-content p-6 space-y-4">
-                <h3 className="text-2xl font-bold">{project.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">
+              <div className="project-content p-6 space-y-4 relative">
+                <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {project.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-2">
+                {/* Tech stack */}
+                <div className="flex flex-wrap gap-2 pt-2">
                   {project.tech.map((tech, idx) => (
                     <span 
                       key={idx}
-                      className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-md text-xs font-medium text-primary"
+                      className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-lg text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                {/* Action buttons */}
+                <div className="flex gap-3 pt-4">
                   <Button 
                     size="sm" 
                     variant="outline"
                     asChild
-                    className="border-border hover:bg-secondary hover:scale-105 transition-transform"
+                    className="flex-1 border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all group/btn"
                   >
                     <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="w-4 h-4 mr-2" />
+                      <Github className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
                       Code
                     </a>
                   </Button>
                   <Button 
                     size="sm"
                     asChild
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground hover:scale-105 transition-transform"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground group/btn"
                   >
                     <a href={project.live} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-4 h-4 mr-2" />
+                      <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                       Live Demo
                     </a>
                   </Button>
                 </div>
               </div>
+
+              {/* Corner accent */}
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-tl-full" />
             </Card>
           ))}
         </div>

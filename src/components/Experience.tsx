@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { Briefcase, GraduationCap, Calendar } from 'lucide-react';
+import { Briefcase, GraduationCap, Calendar, MapPin, Sparkles, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -74,6 +74,7 @@ export default function Experience() {
       organization: 'Centennial College',
       location: 'Toronto, ON',
       period: '2023 - 2027 (Expected)',
+      current: false,
       description: 'Pursuing an advanced diploma in Software Engineering Technology with a focus on full-stack development, database systems, and software design patterns.',
       highlights: [
         'Relevant Coursework: Data Structures, Web Development, Database Design, OOP',
@@ -87,6 +88,7 @@ export default function Experience() {
       organization: 'Tech Solutions Inc.',
       location: 'Toronto, ON',
       period: 'Summer 2024',
+      current: false,
       description: 'Contributed to the development of web applications and gained hands-on experience with modern development practices.',
       highlights: [
         'Developed responsive web components using React and TypeScript',
@@ -101,6 +103,7 @@ export default function Experience() {
       organization: 'Self-Employed',
       location: 'Remote',
       period: '2023 - Present',
+      current: true,
       description: 'Building custom websites and web applications for small businesses and startups.',
       highlights: [
         'Delivered 10+ projects for clients across various industries',
@@ -112,67 +115,112 @@ export default function Experience() {
   ];
 
   return (
-    <section ref={sectionRef} id="experience" className="py-20 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div ref={headingRef} className="space-y-4 mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold">Experience</h2>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+    <section ref={sectionRef} id="experience" className="py-20 px-4 bg-background relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      
+      {/* Vertical timeline line */}
+      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent hidden lg:block" />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div ref={headingRef} className="space-y-4 mb-16 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm font-medium text-primary mb-4">
+            <TrendingUp className="w-4 h-4" />
+            My Journey
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold gradient-text">Experience</h2>
+          <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
             My educational background and professional experience in software development
           </p>
         </div>
 
-        <div ref={timelineRef} className="space-y-6">
+        <div ref={timelineRef} className="space-y-8 relative">
           {experiences.map((exp, index) => (
-            <Card 
-              key={index}
-              className="exp-card bg-card border-border p-6 hover:border-primary/50 transition-all duration-300 cursor-pointer"
-            >
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-shrink-0">
-                  <div className={`p-4 rounded-lg ${
-                    exp.type === 'education' 
-                      ? 'bg-blue-500/10 text-blue-500' 
-                      : 'bg-primary/10 text-primary'
-                  }`}>
-                    {exp.type === 'education' ? (
-                      <GraduationCap className="w-8 h-8" />
-                    ) : (
-                      <Briefcase className="w-8 h-8" />
-                    )}
+            <div key={index} className="relative">
+              {/* Timeline dot */}
+              <div className="absolute left-1/2 top-8 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background shadow-lg shadow-primary/50 hidden lg:block z-10" />
+              
+              <Card 
+                className={`exp-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 cursor-pointer relative overflow-hidden group ${
+                  index % 2 === 0 ? 'lg:mr-auto lg:w-[calc(50%-2rem)]' : 'lg:ml-auto lg:w-[calc(50%-2rem)]'
+                }`}
+              >
+                {/* Current badge */}
+                {exp.current && (
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium rounded-full border border-primary flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
+                    Current
                   </div>
-                </div>
+                )}
 
-                <div className="flex-1 space-y-3">
-                  <div>
-                    <h3 className="text-2xl font-bold">{exp.title}</h3>
-                    <p className="text-lg text-primary font-medium">{exp.organization}</p>
-                    <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {exp.period}
-                      </span>
-                      <span>{exp.location}</span>
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="p-6 md:p-8 relative">
+                  <div className="flex flex-col md:flex-row gap-6">
+                    {/* Icon section */}
+                    <div className="flex-shrink-0">
+                      <div className={`p-4 rounded-2xl border-2 transition-all duration-500 ${
+                        exp.type === 'education' 
+                          ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 group-hover:bg-blue-500/20 group-hover:border-blue-500/40' 
+                          : 'bg-primary/10 border-primary/20 text-primary group-hover:bg-primary/20 group-hover:border-primary/40'
+                      }`}>
+                        {exp.type === 'education' ? (
+                          <GraduationCap className="w-8 h-8" />
+                        ) : (
+                          <Briefcase className="w-8 h-8" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Content section */}
+                    <div className="flex-1 space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">
+                          {exp.title}
+                        </h3>
+                        <p className="text-lg font-semibold text-primary">
+                          {exp.organization}
+                        </p>
+                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1.5 px-3 py-1 bg-secondary/50 rounded-full">
+                            <Calendar className="w-4 h-4" />
+                            {exp.period}
+                          </span>
+                          <span className="flex items-center gap-1.5 px-3 py-1 bg-secondary/50 rounded-full">
+                            <MapPin className="w-4 h-4" />
+                            {exp.location}
+                          </span>
+                        </div>
+                      </div>
+
+                      <p className="text-muted-foreground leading-relaxed border-l-2 border-primary/30 pl-4">
+                        {exp.description}
+                      </p>
+
+                      {/* Highlights */}
+                      <div className="space-y-2 pt-2">
+                        {exp.highlights.map((highlight, idx) => (
+                          <div 
+                            key={idx}
+                            className="flex items-start gap-3 text-sm group/item"
+                          >
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary group-hover/item:scale-150 transition-transform" />
+                            <span className="text-foreground/90 leading-relaxed">
+                              {highlight}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-
-                  <p className="text-muted-foreground leading-relaxed">
-                    {exp.description}
-                  </p>
-
-                  <ul className="space-y-2">
-                    {exp.highlights.map((highlight, idx) => (
-                      <li 
-                        key={idx}
-                        className="flex items-start gap-2 text-sm text-foreground"
-                      >
-                        <span className="text-primary mt-1">•</span>
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            </Card>
+
+                {/* Corner accent */}
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-tl-full" />
+              </Card>
+            </div>
           ))}
         </div>
       </div>
