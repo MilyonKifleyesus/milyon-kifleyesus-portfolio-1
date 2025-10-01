@@ -163,35 +163,50 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Heading animation
-      gsap.from(headingRef.current, {
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
+      // Heading animation with immediate visibility fallback
+      if (headingRef.current) {
+        gsap.fromTo(headingRef.current,
+          { y: 50, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: 'top 95%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
+      }
 
       // Stagger animation for project cards
       const cards = gridRef.current?.querySelectorAll('.project-card');
-      if (cards) {
-        gsap.from(cards, {
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none reverse'
-          },
-          y: 80,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power3.out'
-        });
+      if (cards && cards.length > 0) {
+        gsap.fromTo(cards,
+          { y: 80, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
       }
+
+      // Trigger ScrollTrigger refresh after a short delay
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     }, sectionRef);
 
     return () => ctx.revert();

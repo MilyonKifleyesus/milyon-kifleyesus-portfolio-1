@@ -16,32 +16,47 @@ export default function Services() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(headingRef.current, {
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
+      if (headingRef.current) {
+        gsap.fromTo(headingRef.current,
+          { y: 50, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: 'top 95%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
+      }
 
-      gsap.from(servicesGridRef.current?.children || [], {
-        scrollTrigger: {
-          trigger: servicesGridRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 80,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'power3.out'
-      });
+      const serviceCards = servicesGridRef.current?.children;
+      if (serviceCards && serviceCards.length > 0) {
+        gsap.fromTo(Array.from(serviceCards),
+          { y: 80, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: servicesGridRef.current,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
+      }
+
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     }, sectionRef);
 
     return () => ctx.revert();

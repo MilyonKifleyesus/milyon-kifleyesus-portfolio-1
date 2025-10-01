@@ -47,37 +47,52 @@ export default function About() {
       });
 
       // Skills heading animation
-      gsap.from(skillsHeadingRef.current, {
-        scrollTrigger: {
-          trigger: skillsHeadingRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      });
+      if (skillsHeadingRef.current) {
+        gsap.fromTo(skillsHeadingRef.current,
+          { y: 50, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: skillsHeadingRef.current,
+              start: 'top 95%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
+      }
 
       // Skills grid stagger animation
-      gsap.from(skillsGridRef.current?.children || [], {
-        scrollTrigger: {
-          trigger: skillsGridRef.current,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        },
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out'
-      });
+      const skillCards = skillsGridRef.current?.children;
+      if (skillCards && skillCards.length > 0) {
+        gsap.fromTo(Array.from(skillCards),
+          { y: 60, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: skillsGridRef.current,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+              once: false
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out',
+            immediateRender: false
+          }
+        );
+      }
+
+      setTimeout(() => ScrollTrigger.refresh(), 100);
 
       // Skill badges hover effect
-      const skillCards = skillsGridRef.current?.querySelectorAll('.skill-card');
-      skillCards?.forEach((card) => {
+      const skillCardElements = skillsGridRef.current?.querySelectorAll('.skill-card');
+      skillCardElements?.forEach((card) => {
         card.addEventListener('mouseenter', () => {
           gsap.to(card, {
             scale: 1.02,
