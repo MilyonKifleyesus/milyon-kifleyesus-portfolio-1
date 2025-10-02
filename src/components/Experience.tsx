@@ -17,32 +17,18 @@ export default function Experience() {
   const experiences = [
   {
     type: 'education',
-    title: 'Software Engineering Technology (Co-op)',
+    title: 'Advanced Diploma in Software Engineering Technology (Co-op)',
     organization: 'Centennial College',
     location: 'Toronto, ON',
-    period: '2023 - 2027 (Expected)',
-    current: false,
-    description: 'Pursuing an advanced diploma in Software Engineering Technology with a focus on full-stack development, database systems, and software design patterns.',
+    period: '2024 - 2027 (Expected)',
+    current: true,
+    description: 'Specializing in client-side web development, programming, and database concepts. Expected graduation: 2027',
     highlights: [
-    'Relevant Coursework: Data Structures, Web Development, Database Design, OOP',
-    'Dean\'s List Achievement',
-    'Active member of the Computer Science Club']
-
-  },
-  {
-    type: 'work',
-    title: 'Software Development Intern',
-    organization: 'Tech Solutions Inc.',
-    location: 'Toronto, ON',
-    period: 'Summer 2024',
-    current: false,
-    description: 'Contributed to the development of web applications and gained hands-on experience with modern development practices.',
-    highlights: [
-    'Developed responsive web components using React and TypeScript',
-    'Collaborated with senior developers on feature implementation',
-    'Participated in code reviews and agile development processes',
-    'Improved application performance by 25% through optimization']
-
+      'Focus on client-side web development and modern programming practices',
+      'Hands-on experience with database concepts and design',
+      'Co-op program providing real-world industry experience',
+      'Advanced diploma program with comprehensive software engineering curriculum'
+    ]
   },
   {
     type: 'work',
@@ -53,12 +39,58 @@ export default function Experience() {
     current: true,
     description: 'Building custom websites and web applications for small businesses and startups.',
     highlights: [
-    'Delivered 10+ projects for clients across various industries',
-    'Managed full project lifecycle from requirements to deployment',
-    'Maintained 100% client satisfaction rate',
-    'Specialized in responsive design and modern web technologies']
-
-  }];
+      'Delivered 10+ projects for clients across various industries',
+      'Managed full project lifecycle from requirements to deployment',
+      'Maintained 100% client satisfaction rate',
+      'Specialized in responsive design and modern web technologies'
+    ]
+  },
+  {
+    type: 'work',
+    title: 'Delivery Driver',
+    organization: 'Hunger Hub',
+    location: 'Toronto, ON',
+    period: '2021 - Present',
+    current: true,
+    description: 'Manage multiple deliveries efficiently using the Hunger Hub app, maintaining high customer satisfaction through professional communication and prompt service.',
+    highlights: [
+      'Efficient multi-tasking and route optimization using delivery app',
+      'Maintained high customer satisfaction through professional service',
+      'Strong time management and communication skills',
+      'Reliable and prompt service delivery'
+    ]
+  },
+  {
+    type: 'work',
+    title: 'Freelance Artist & Illustrator',
+    organization: 'Self-Employed',
+    location: 'Remote',
+    period: '2018 - Present',
+    current: true,
+    description: 'Create commissioned acrylic paintings, pencil sketches, and digital illustrations for private clients.',
+    highlights: [
+      'Design custom portraits, landscapes, and abstract pieces',
+      'Strong use of color theory and composition techniques',
+      'Showcase artwork at school events and local exhibitions',
+      'Multiple commissioned pieces for private clients'
+    ]
+  },
+  {
+    type: 'work',
+    title: 'Ebike Repair Technician',
+    organization: 'DAYMARK',
+    location: 'Toronto, ON',
+    period: 'June 2022 - August 2022',
+    current: false,
+    description: 'Diagnosed and repaired electronic and mechanical issues, assembled new bikes, and maintained detailed documentation.',
+    highlights: [
+      'Diagnosed and resolved electronic and mechanical issues',
+      'Assembled new ebikes following technical specifications',
+      'Maintained detailed repair and maintenance documentation',
+      'Provided excellent customer service and technical support'
+    ]
+  }
+];
 
 
   useEffect(() => {
@@ -123,9 +155,9 @@ export default function Experience() {
             <TrendingUp className="w-4 h-4" />
             My Journey
           </div>
-          <h2 className="text-4xl md:text-6xl font-bold gradient-text !opacity-100 !block">Experience</h2>
+          <h2 className="text-4xl md:text-6xl font-bold gradient-text !opacity-100 !block">Education & Experience</h2>
           <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            My educational background and professional experience in software development
+            My academic background and professional journey across development, creative arts, and service industries
           </p>
         </div>
 
