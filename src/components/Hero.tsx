@@ -1,19 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Mail, Github, Linkedin, FileText } from 'lucide-react';
 import Logo from './Logo';
+import MacbookModel from './MacbookModel';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-
-// MODULE VERSION FIX: Dynamic import to prevent SSR issues with @react-three/fiber
-// Three.js components must be loaded client-side only due to WebGL dependencies
-const MacbookModel = dynamic(() => import('./MacbookModel'), {
-  ssr: false,
-  loading: () => <div className="w-full h-full flex items-center justify-center text-muted-foreground">Loading 3D Model...</div>
-});
 
 gsap.registerPlugin(ScrollToPlugin);
 

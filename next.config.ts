@@ -4,12 +4,6 @@ import path from "node:path";
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
 const nextConfig: NextConfig = {
-  typescript: {
-    // MODULE VERSION FIX: Ignore TypeScript errors during build
-    // @react-three/fiber v8.x has incomplete type definitions for React 19
-    // This allows the build to succeed while maintaining runtime type safety
-    ignoreBuildErrors: true,
-  },
   images: {
     remotePatterns: [
       {
