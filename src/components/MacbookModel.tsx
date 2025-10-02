@@ -23,19 +23,17 @@
  * - Mobile: minDistance=10, maxDistance=28
  *
  * Dependencies:
- *  - react 19+
- *  - three 0.178.x
- *  - @react-three/fiber 8.17.10
- *  - @react-three/drei 9.114.3
+ *  - react 19.1.0
+ *  - three 0.178.0
+ *  - @react-three/fiber 9.3.0 (stable, React 19 compatible)
+ *  - @react-three/drei 10.7.6 (stable, React 19 compatible)
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 import * as THREE from 'three';
 import React, { Suspense, useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, ContactShadows, useGLTF, PerspectiveCamera, OrbitControls } from '@react-three/drei';
-
-extend(THREE);
 
 interface MacBookProps {
   open: boolean;
