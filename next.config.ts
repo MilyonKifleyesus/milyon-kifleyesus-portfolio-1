@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   // turbopack: {
   //   rules: {
   //     "*.{jsx,tsx}": {

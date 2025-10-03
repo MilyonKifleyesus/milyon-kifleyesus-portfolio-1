@@ -5,10 +5,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+// Lazy-load GSAP only on the client when needed to reduce initial JS
+let gsapRef: any = null;
+let ScrollTriggerRef: any = null;
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -150,56 +149,79 @@ export default function Projects() {
   ];
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Heading animation with immediate visibility fallback
-      if (headingRef.current) {
-        gsap.fromTo(
-          headingRef.current,
-          { y: 50, opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: headingRef.current,
-              start: "top 95%",
-              toggleActions: "play none none none",
-              once: false,
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power3.out",
-            immediateRender: false,
-          }
-        );
-      }
+    let ctx: any | null = null;
+    let isCancelled = false;
 
-      // Stagger animation for project cards
-      const cards = gridRef.current?.querySelectorAll(".project-card");
-      if (cards && cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { y: 80, opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 90%",
-              toggleActions: "play none none none",
-              once: false,
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            immediateRender: false,
-          }
-        );
-      }
+    (async () => {
+      if (typeof window === "undefined") return;
+      const [gsapModule, scrollTriggerModule] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      const gsap = (gsapModule as any).default ?? (gsapModule as any);
+      const ScrollTrigger =
+        (scrollTriggerModule as any).ScrollTrigger ??
+        (scrollTriggerModule as any).default ??
+        (scrollTriggerModule as any);
+      if (isCancelled) return;
+      gsapRef = gsap;
+      ScrollTriggerRef = ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Trigger ScrollTrigger refresh after a short delay
-      setTimeout(() => ScrollTrigger.refresh(), 100);
-    }, sectionRef);
+      ctx = gsap.context(() => {
+        // Heading animation with immediate visibility fallback
+        if (headingRef.current) {
+          gsap.fromTo(
+            headingRef.current,
+            { y: 50, opacity: 0 },
+            {
+              scrollTrigger: {
+                trigger: headingRef.current,
+                start: "top 95%",
+                toggleActions: "play none none none",
+                once: false,
+              },
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              ease: "power3.out",
+              immediateRender: false,
+            }
+          );
+        }
 
-    return () => ctx.revert();
+        // Stagger animation for project cards
+        const cards = gridRef.current?.querySelectorAll(".project-card");
+        if (cards && cards.length > 0) {
+          gsap.fromTo(
+            cards,
+            { y: 80, opacity: 0 },
+            {
+              scrollTrigger: {
+                trigger: gridRef.current,
+                start: "top 90%",
+                toggleActions: "play none none none",
+                once: false,
+              },
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.15,
+              ease: "power3.out",
+              immediateRender: false,
+            }
+          );
+        }
+
+        // Trigger ScrollTrigger refresh after a short delay
+        setTimeout(() => ScrollTrigger.refresh(), 100);
+      }, sectionRef);
+    })();
+
+    return () => {
+      if (ctx) ctx.revert();
+      isCancelled = true;
+    };
   }, []);
 
   return (

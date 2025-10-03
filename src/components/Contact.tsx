@@ -15,10 +15,9 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+// Lazy-load GSAP at runtime to reduce initial JS
+let gsapRef: any = null;
+let ScrollTriggerRef: any = null;
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -38,67 +37,90 @@ export default function Contact() {
   >("idle");
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Heading animation
-      gsap.from(headingRef.current, {
-        scrollTrigger: {
-          trigger: headingRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
+    let ctx: any | null = null;
+    let isCancelled = false;
 
-      // Contact info animation
-      gsap.from(contactInfoRef.current, {
-        scrollTrigger: {
-          trigger: contactInfoRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-        x: -80,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
+    (async () => {
+      if (typeof window === "undefined") return;
+      const [gsapModule, scrollTriggerModule] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      const gsap = (gsapModule as any).default ?? (gsapModule as any);
+      const ScrollTrigger =
+        (scrollTriggerModule as any).ScrollTrigger ??
+        (scrollTriggerModule as any).default ??
+        (scrollTriggerModule as any);
+      if (isCancelled) return;
+      gsapRef = gsap;
+      ScrollTriggerRef = ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
 
-      // Form animation
-      gsap.from(formRef.current, {
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-        x: 80,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
+      ctx = gsap.context(() => {
+        // Heading animation
+        gsap.from(headingRef.current, {
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
 
-      // Form fields stagger animation
-      const formFields = formRef.current?.querySelectorAll(".form-field");
-      gsap.from(formFields || [], {
-        scrollTrigger: {
-          trigger: formRef.current,
-          start: "top 70%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "power2.out",
-      });
-    }, sectionRef);
+        // Contact info animation
+        gsap.from(contactInfoRef.current, {
+          scrollTrigger: {
+            trigger: contactInfoRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+          x: -80,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
 
-    return () => ctx.revert();
+        // Form animation
+        gsap.from(formRef.current, {
+          scrollTrigger: {
+            trigger: formRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+          x: 80,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        });
+
+        // Form fields stagger animation
+        const formFields = formRef.current?.querySelectorAll(".form-field");
+        gsap.from(formFields || [], {
+          scrollTrigger: {
+            trigger: formRef.current,
+            start: "top 70%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+      }, sectionRef);
+    })();
+
+    return () => {
+      if (ctx) ctx.revert();
+      isCancelled = true;
+    };
   }, []);
 
   const handleChange = (
@@ -131,16 +153,16 @@ export default function Contact() {
         setFormData({ name: "", email: "", subject: "", message: "" });
 
         // Animate success message with a small delay to ensure DOM element exists
-        setTimeout(() => {
+        setTimeout(async () => {
           const successElement = document.querySelector(".success-message");
-          if (successElement) {
-            gsap.from(successElement, {
-              scale: 0.8,
-              opacity: 0,
-              duration: 0.5,
-              ease: "back.out(1.7)",
-            });
-          }
+          if (!successElement) return;
+          const gsap = gsapRef ?? (await import("gsap")).default;
+          (gsap as any).from(successElement, {
+            scale: 0.8,
+            opacity: 0,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+          });
         }, 100);
       } else {
         throw new Error(result.error || "Failed to send message");
