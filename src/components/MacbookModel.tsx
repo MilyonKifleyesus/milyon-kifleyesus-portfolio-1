@@ -30,10 +30,16 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-import * as THREE from 'three';
-import React, { Suspense, useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Environment, ContactShadows, useGLTF, PerspectiveCamera, OrbitControls } from '@react-three/drei';
+import * as THREE from "three";
+import React, { Suspense, useRef, useEffect, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import {
+  Environment,
+  ContactShadows,
+  useGLTF,
+  PerspectiveCamera,
+  OrbitControls,
+} from "@react-three/drei";
 
 interface MacBookProps {
   open: boolean;
@@ -45,7 +51,7 @@ interface MacBookProps {
  */
 function MacBook({ open, onClick }: MacBookProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/mac-draco.glb') as any;
+  const { scene } = useGLTF("/mac-draco.glb") as any;
 
   const clonedScene = React.useMemo(() => scene.clone(), [scene]);
 
@@ -57,15 +63,23 @@ function MacBook({ open, onClick }: MacBookProps) {
     if (!clonedScene) return;
 
     const lidNames = [
-      'top', 'lid', 'screen', 'display',
-      'Top', 'Lid', 'Screen', 'Display',
-      'matte', 'cover', 'upper'
+      "top",
+      "lid",
+      "screen",
+      "display",
+      "Top",
+      "Lid",
+      "Screen",
+      "Display",
+      "matte",
+      "cover",
+      "upper",
     ];
 
     clonedScene.traverse((child: any) => {
       if (child.isMesh || child.isGroup) {
-        const childName = (child.name || '').toLowerCase();
-        if (lidNames.some(name => childName.includes(name.toLowerCase()))) {
+        const childName = (child.name || "").toLowerCase();
+        if (lidNames.some((name) => childName.includes(name.toLowerCase()))) {
           lidRef.current = child;
           if (!child.userData.originalRotation) {
             child.userData.originalRotation = child.rotation.x;
@@ -106,16 +120,18 @@ function MacBook({ open, onClick }: MacBookProps) {
         onClick();
       }}
       onPointerOver={() => {
-        if (typeof document !== 'undefined') document.body.style.cursor = 'pointer';
+        if (typeof document !== "undefined")
+          document.body.style.cursor = "pointer";
       }}
       onPointerOut={() => {
-        if (typeof document !== 'undefined') document.body.style.cursor = 'auto';
+        if (typeof document !== "undefined")
+          document.body.style.cursor = "auto";
       }}
     >
       {/* NUMERIC CHANGE: scale reduced from 2.2 → 2.0 to ensure full visibility */}
       <primitive
         object={clonedScene}
-        scale={2.0}                // ← zoom-out aid (slightly smaller model)
+        scale={1.0} // ← zoom-out aid (slightly smaller model)
         position={[0, -1.5, 0]}
         rotation={[0, 0, 0]}
       />
@@ -152,7 +168,10 @@ function FallbackBox({ open, onClick }: MacBookProps) {
       );
       lidRef.current.rotation.x = currentRotation.current;
 
-      const denom = Math.abs(targetRotation.current) > 1e-6 ? targetRotation.current : -Math.PI / 2.5;
+      const denom =
+        Math.abs(targetRotation.current) > 1e-6
+          ? targetRotation.current
+          : -Math.PI / 2.5;
       const progress = Math.abs(currentRotation.current / denom);
       lidRef.current.position.y = -1.4 + progress * 1.4;
       lidRef.current.position.z = -1.5 + progress * 0.2;
@@ -167,10 +186,12 @@ function FallbackBox({ open, onClick }: MacBookProps) {
         onClick();
       }}
       onPointerOver={() => {
-        if (typeof document !== 'undefined') document.body.style.cursor = 'pointer';
+        if (typeof document !== "undefined")
+          document.body.style.cursor = "pointer";
       }}
       onPointerOut={() => {
-        if (typeof document !== 'undefined') document.body.style.cursor = 'auto';
+        if (typeof document !== "undefined")
+          document.body.style.cursor = "auto";
       }}
     >
       <mesh ref={meshRef} position={[0, -1.5, 0]}>
@@ -186,7 +207,11 @@ function FallbackBox({ open, onClick }: MacBookProps) {
       {open && (
         <mesh position={[0, 0, -1.25]} rotation={[-Math.PI / 2.5, 0, 0]}>
           <planeGeometry args={[3.6, 2.2]} />
-          <meshStandardMaterial color="#0C9081" emissive="#0A7D71" emissiveIntensity={0.3} />
+          <meshStandardMaterial
+            color="#0C9081"
+            emissive="#0A7D71"
+            emissiveIntensity={0.3}
+          />
         </mesh>
       )}
     </group>
@@ -203,14 +228,16 @@ function ModelWithFallback({ open, onClick }: MacBookProps) {
     let mounted = true;
     (async () => {
       try {
-        await useGLTF.preload('/mac-draco.glb');
+        await useGLTF.preload("/mac-draco.glb");
         if (!mounted) return;
       } catch {
         if (!mounted) return;
         setHasError(true);
       }
     })();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (hasError) {
@@ -306,63 +333,64 @@ function CameraWithControls() {
   const controlsRef = useRef<any>(null);
 
   // Store current device type to update controls when screen resizes
-  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
 
   useEffect(() => {
     if (!cameraRef.current) return;
 
     const width = size.width;
-    let newDeviceType: 'mobile' | 'tablet' | 'desktop';
+    let newDeviceType: "mobile" | "tablet" | "desktop";
 
     // MOBILE: Smallest screens - maximum zoom out for complete visibility
     if (width < 640) {
-      newDeviceType = 'mobile';
+      newDeviceType = "mobile";
 
-      // CAMERA POSITION: Farthest back to show entire model on small screen
-      // Z=18 chosen to ensure no clipping with scaled model (2.2) even when opened
+      // CAMERA POSITION: Much farther back to show entire model on small screen
+      // Z=25 chosen to ensure complete model visibility including when opened
+      cameraRef.current.position.set(0, 0, 25);
+
+      // FOV: 65° provides wider angle view necessary for narrow mobile screens
+      // Much wider to show the complete model
+      cameraRef.current.fov = 65;
+
+      // TABLET: Medium screens - balanced positioning
+    } else if (width < 1024) {
+      newDeviceType = "tablet";
+
+      // CAMERA POSITION: Farther back for better overview on tablet
+      // Z=20 provides complete model visibility
+      cameraRef.current.position.set(0, 0, 20);
+
+      // FOV: 55° wider field of view for mid-size screens
+      // Wider to show the complete model
+      cameraRef.current.fov = 55;
+
+      // DESKTOP: Large screens - farther back to show complete model
+    } else {
+      newDeviceType = "desktop";
+
+      // CAMERA POSITION: Farther back to show complete model
+      // Z=18 provides complete model visibility while maintaining detail
       cameraRef.current.position.set(0, 0, 18);
 
-      // FOV: 58° provides wider angle view necessary for narrow mobile screens
-      // Wider than desktop to counteract narrow viewport width
-      cameraRef.current.fov = 58;
-
-    // TABLET: Medium screens - balanced positioning
-    } else if (width < 1024) {
-      newDeviceType = 'tablet';
-
-      // CAMERA POSITION: Medium distance for tablet-sized viewport
-      // Z=16 provides good balance between overview and detail
-      cameraRef.current.position.set(0, 0, 16);
-
-      // FOV: 50° moderate field of view for mid-size screens
-      // Narrower than mobile but wider than desktop for optimal framing
+      // FOV: 50° wider field of view to show complete model
+      // Wider FOV = more wide-angle lens effect = shows more of the model
       cameraRef.current.fov = 50;
-
-    // DESKTOP: Large screens - closer with narrow FOV for photographic look
-    } else {
-      newDeviceType = 'desktop';
-
-      // CAMERA POSITION: Closest position (but still farther than original 8-12)
-      // Z=14 provides detailed view while showing complete model
-      cameraRef.current.position.set(0, 0, 14);
-
-      // FOV: 42° creates minimal distortion and realistic perspective
-      // Lower FOV = more telephoto lens effect = less distortion on edges
-      cameraRef.current.fov = 42;
     }
 
     setDeviceType(newDeviceType);
 
     // FRUSTUM PLANES: Wide range to prevent any clipping
-    // near=0.1: Very close to camera without Z-fighting
-    // far=200: Far enough to never clip distant objects
-    cameraRef.current.near = 0.1;
-    cameraRef.current.far = 200;
+    // near=0.01: Much closer to camera to prevent zoom clipping
+    // far=1000: Extended far plane for better depth range
+    cameraRef.current.near = 0.01;
+    cameraRef.current.far = 1000;
 
     // CRITICAL: Must update projection matrix after changing FOV
     // Without this, FOV changes won't take effect
     cameraRef.current.updateProjectionMatrix();
-
   }, [size.width]);
 
   // Update OrbitControls zoom limits when device type changes
@@ -372,34 +400,31 @@ function CameraWithControls() {
     // ZOOM LIMITS: Set based on device type for optimal UX
     // These values tested across multiple devices for best experience
 
-    if (deviceType === 'mobile') {
-      // MOBILE ZOOM LIMITS
-      // min=10: Prevents zooming too close on small screens (causes clipping)
-      // max=28: Allows zooming out quite far (model still visible at this distance)
-      // Range: 2.8x provides good flexibility for touch gestures
-      controlsRef.current.minDistance = 10;
-      controlsRef.current.maxDistance = 28;
-
-    } else if (deviceType === 'tablet') {
-      // TABLET ZOOM LIMITS
-      // min=9: Slightly closer than mobile for detail inspection
-      // max=22: Not as far as mobile (medium screen doesn't need it)
-      // Range: 2.4x balanced range for tablet interaction
-      controlsRef.current.minDistance = 9;
-      controlsRef.current.maxDistance = 22;
-
+    if (deviceType === "mobile") {
+      // MOBILE ZOOM LIMITS - FIXED: Allow closer zoom without clipping
+      // min=3: Closer zoom now possible with near=0.01
+      // max=35: Much farther zoom out to show complete model
+      // Range: 11.7x provides excellent flexibility for touch gestures
+      controlsRef.current.minDistance = 3;
+      controlsRef.current.maxDistance = 35;
+    } else if (deviceType === "tablet") {
+      // TABLET ZOOM LIMITS - FIXED: Allow closer zoom without clipping
+      // min=2: Much closer than before for detailed inspection
+      // max=30: Farther zoom out to show complete model
+      // Range: 15x balanced range for tablet interaction
+      controlsRef.current.minDistance = 2;
+      controlsRef.current.maxDistance = 30;
     } else {
-      // DESKTOP ZOOM LIMITS
-      // min=8: Closest zoom for maximum detail (keyboard, ports, etc.)
-      // max=25: Farthest zoom while keeping model large enough
-      // Range: 3.1x widest range for precise mouse wheel control
-      controlsRef.current.minDistance = 8;
-      controlsRef.current.maxDistance = 25;
+      // DESKTOP ZOOM LIMITS - FIXED: Allow closest zoom without clipping
+      // min=1.5: Closest possible zoom for maximum detail (keyboard, ports, etc.)
+      // max=35: Much farther zoom out to show complete model
+      // Range: 23.3x widest range for precise mouse wheel control
+      controlsRef.current.minDistance = 1.5;
+      controlsRef.current.maxDistance = 35;
     }
 
     // Force controls to update with new limits
     controlsRef.current.update();
-
   }, [deviceType]);
 
   return (
@@ -408,10 +433,10 @@ function CameraWithControls() {
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
-        position={[0, 0, 14]}  // Initial position (desktop default)
-        fov={42}               // Initial FOV (desktop default)
-        near={0.1}             // Near clipping plane
-        far={200}              // Far clipping plane
+        position={[0, 0, 18]} // Initial position (desktop default) - FIXED: Farther back to show complete model
+        fov={50} // Initial FOV (desktop default) - FIXED: Wider to show complete model
+        near={0.01} // Near clipping plane - FIXED: Much closer to prevent zoom clipping
+        far={1000} // Far clipping plane - FIXED: Extended range
       />
 
       {/*
@@ -429,37 +454,30 @@ function CameraWithControls() {
       */}
       <OrbitControls
         ref={controlsRef}
-
         // ZOOM CONFIGURATION (Primary feature)
-        enableZoom={true}            // ✅ Enable wheel/pinch zoom
-        zoomSpeed={0.8}              // Smooth zoom speed (0.5=slow, 1.0=fast, 0.8=optimal)
-
+        enableZoom={true} // ✅ Enable wheel/pinch zoom
+        zoomSpeed={0.8} // Smooth zoom speed (0.5=slow, 1.0=fast, 0.8=optimal)
         // ROTATION/PAN DISABLED (Keep model centered and oriented)
-        enableRotate={false}         // Disabled: prevents disorientation
-        enablePan={false}            // Disabled: keeps model centered
-
-        // ZOOM LIMITS (Set per device type in useEffect above)
-        minDistance={8}              // Default, updated per device
-        maxDistance={25}             // Default, updated per device
-
+        enableRotate={false} // Disabled: prevents disorientation
+        enablePan={false} // Disabled: keeps model centered
+        // ZOOM LIMITS (Set per device type in useEffect above) - FIXED: Much closer zoom now possible
+        minDistance={1.5} // Default, updated per device - FIXED: Closer zoom without clipping
+        maxDistance={35} // Default, updated per device - FIXED: Much farther zoom out to show complete model
         // TARGET (What camera looks at)
-        target={[0, -1, 0]}          // Look at model center (Y=-1 matches model position)
-
+        target={[0, -1, 0]} // Look at model center (Y=-1 matches model position)
         // DAMPING (Smooth transitions)
-        enableDamping={true}         // Enables inertial zoom
-        dampingFactor={0.05}         // Smooth deceleration factor
-
+        enableDamping={true} // Enables inertial zoom
+        dampingFactor={0.05} // Smooth deceleration factor
         // TOUCH CONFIGURATION (Mobile/tablet)
         touches={{
-          ONE: THREE.TOUCH.PAN,      // Single touch disabled (enablePan=false)
-          TWO: THREE.TOUCH.DOLLY_PAN // Two-finger pinch-to-zoom
+          ONE: THREE.TOUCH.PAN, // Single touch disabled (enablePan=false)
+          TWO: THREE.TOUCH.DOLLY_PAN, // Two-finger pinch-to-zoom
         }}
-
         // MOUSE BUTTON CONFIGURATION (Desktop)
         mouseButtons={{
-          LEFT: undefined,            // Left click disabled
-          MIDDLE: undefined,          // Middle click disabled
-          RIGHT: undefined            // Right click disabled
+          LEFT: undefined, // Left click disabled
+          MIDDLE: undefined, // Middle click disabled
+          RIGHT: undefined, // Right click disabled
         }}
       />
     </>
@@ -477,15 +495,23 @@ export default function MacbookModel() {
     <div ref={containerRef} className="w-full h-full relative">
       <Canvas
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-        style={{ width: '100%', height: '100%' }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance",
+        }}
+        style={{ width: "100%", height: "100%" }}
       >
         {/* ENHANCED CAMERA WITH ORBIT CONTROLS: Wheel/pinch zoom enabled */}
         <CameraWithControls />
 
         {/* Lighting (unchanged) */}
         <pointLight position={[10, 10, 10]} intensity={1.2} color="#ffffff" />
-        <pointLight position={[-10, -10, -10]} intensity={0.6} color="#ffffff" />
+        <pointLight
+          position={[-10, -10, -10]}
+          intensity={0.6}
+          color="#ffffff"
+        />
         <spotLight
           position={[0, 5, 5]}
           angle={0.3}
@@ -504,14 +530,20 @@ export default function MacbookModel() {
           <Environment preset="city" />
         </Suspense>
 
-        <ContactShadows position={[0, -2.5, 0]} opacity={0.4} scale={10} blur={2} far={4} />
+        <ContactShadows
+          position={[0, -2.5, 0]}
+          opacity={0.4}
+          scale={10}
+          blur={2}
+          far={4}
+        />
       </Canvas>
 
       {/* UI: Interactive instructions with zoom hint */}
       <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 pointer-events-none">
         <div className="bg-background/80 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-border">
           <p className="text-muted-foreground text-xs sm:text-sm font-medium transition-all duration-300">
-            {open ? 'Click to close' : 'Click to open'} • Scroll to zoom
+            {open ? "Click to close" : "Click to open"} • Scroll to zoom
           </p>
         </div>
       </div>
@@ -527,6 +559,6 @@ export default function MacbookModel() {
 }
 
 // Preload model (unchanged)
-if (typeof window !== 'undefined') {
-  useGLTF.preload('/mac-draco.glb');
+if (typeof window !== "undefined") {
+  useGLTF.preload("/mac-draco.glb");
 }
