@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, Mail, Github, Linkedin, FileText } from 'lucide-react';
 import Logo from './Logo';
+import HamburgerMenu from './HamburgerMenu';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
@@ -98,34 +99,37 @@ export default function Hero() {
   return (
     <section ref={heroRef} className="min-h-screen flex flex-col relative px-4 py-20">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 supports-[backdrop-filter]:bg-background/70 backdrop-blur-md border-b border-border shadow-sm">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+          <div className="flex justify-between items-center h-14 md:h-16">
             <Logo />
-            <div className="hidden md:flex space-x-8">
-              <button onClick={() => scrollToSection('about')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+            <div className="hidden md:flex items-center gap-4 text-base font-medium">
+              <button onClick={() => scrollToSection('about')} className="text-base font-medium text-muted-foreground hover:text-primary transition-colors">
                 About
               </button>
-              <button onClick={() => scrollToSection('services')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <button onClick={() => scrollToSection('services')} className="text-base font-medium text-muted-foreground hover:text-primary transition-colors">
                 Services
               </button>
-              <button onClick={() => scrollToSection('projects')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <button onClick={() => scrollToSection('projects')} className="text-base font-medium text-muted-foreground hover:text-primary transition-colors">
                 Projects
               </button>
-              <button onClick={() => scrollToSection('experience')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <button onClick={() => scrollToSection('experience')} className="text-base font-medium text-muted-foreground hover:text-primary transition-colors">
                 Experience
               </button>
-              <button onClick={() => scrollToSection('contact')} className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <button onClick={() => scrollToSection('contact')} className="text-base font-medium text-muted-foreground hover:text-primary transition-colors">
                 Contact
               </button>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="https://github.com/milyonkifle" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="https://linkedin.com/in/milyonkifle" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
+              <div className="hidden md:flex space-x-2">
+                <a href="https://github.com/milyonkifle" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Github className="w-5 h-5" />
+                </a>
+                <a href="https://linkedin.com/in/milyonkifle" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+              <HamburgerMenu scrollToSection={scrollToSection} />
             </div>
           </div>
         </div>

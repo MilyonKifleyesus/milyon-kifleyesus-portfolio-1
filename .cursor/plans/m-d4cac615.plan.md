@@ -1,55 +1,47 @@
-<!-- d4cac615-97b4-4ceb-b158-98fc8cd0dc00 39a60f25-2b2c-4b13-a5b6-3dbe28395efa -->
-# Fix 401 on Admin Messages
+<!-- d4cac615-97b4-4ceb-b158-98fc8cd0dc00 4b50ba30-aa6a-497f-92cb-6052d89540d1 -->
+# Navigation Menu UX Improvements
 
-- **Overview**: Align the admin token used by the API and the client, and ensure the token is available before triggering data fetches.
+## Files to update
+- `src/components/Hero.tsx` (navbar container, desktop link row styling)
+- `src/components/HamburgerMenu.tsx` (mobile drawer layout, grouping, active/hover states, CTA section)
 
-### Steps
+## Changes
+- Spacing (Hero navbar)
+  - Set heights: `h-14 md:h-16`
+  - Padding: `px-3 sm:px-4 md:px-6`
+  - Add `shadow-sm` and increase contrast: `bg-background/90 backdrop-blur`
+- Desktop links (Hero)
+  - Reduce gaps to `gap-4`, `text-base font-medium`, active uses `font-semibold` and bottom border on hover
+- Mobile drawer (HamburgerMenu)
+  - Drawer width to `w-72 max-w-[85vw]`, `bg-card/95 border-l shadow-xl`
+  - Overlay `bg-black/40` with opacity transition
+  - Slide-in transitions: `translate-x-full -> 0` in 300ms
+- Visual grouping (HamburgerMenu)
+  - Use list grid: `grid grid-cols-[20px_1fr] gap-3`
+  - Add section labels: `Navigate` and `Quick Actions` with `text-xs uppercase tracking-wider text-muted-foreground`
+  - Divider between nav links and actions: `border-t mt-4 pt-4`
+- Typography hierarchy
+  - Menu item text: `text-base font-medium`
+  - Active state: left border `border-l-2 border-primary bg-primary/5 text-foreground font-semibold`
+- Button hierarchy (mobile only)
+  - Add CTAs under Quick Actions:
+    - Primary: "View My Work" (scroll to `projects`) filled style
+    - Secondary: "Get in Touch" (scroll to `contact`) outline style
+    - Tertiary: "Resume" link (muted text with underline on hover)
+  - Keep CTAs separate from nav list via divider
+- Accessibility
+  - Preserve ARIA labels, focus rings, 44px touch targets
+  - Close menu on outside click, Esc, or item click (already present)
 
-1) Configure a single source of truth for the token
-
-- Create `.env.local` with `ADMIN_TOKEN` and `NEXT_PUBLIC_ADMIN_TOKEN` using the same value (e.g., `admin-secure-token-123`).
-- Rationale: Server reads `ADMIN_TOKEN`; client can read only `NEXT_PUBLIC_*` vars at build time.
-
-2) Make server accept configured token
-
-- In `src/app/api/admin/messages/route.ts`, update `isAuthenticated` to read `process.env.ADMIN_TOKEN || process.env.NEXT_PUBLIC_ADMIN_TOKEN || 'admin-secure-token-123'`.
-- Minimal snippet:
-```startLine:endLine:src/app/api/admin/messages/route.ts
-function isAuthenticated(request: NextRequest): boolean {
-  const authHeader = request.headers.get("authorization");
-  const expectedToken =
-    process.env.ADMIN_TOKEN || process.env.NEXT_PUBLIC_ADMIN_TOKEN || "admin-secure-token-123";
-  return authHeader === `Bearer ${expectedToken}`;
-}
-```
-
-
-3) Ensure client always has the token and sends it consistently
-
-- In `src/components/AdminDashboard.tsx`, derive `const defaultToken = process.env.NEXT_PUBLIC_ADMIN_TOKEN || 'admin-secure-token-123';` at module scope.
-- In component, compute `const token = (typeof window !== 'undefined' && localStorage.getItem('adminToken')) || defaultToken;`.
-- Use `useEffect(() => { if (token) fetchMessages(); }, [token]);` and remove early returns that block fetch when token is falsy.
-- Ensure all requests (GET/PUT/DELETE) use this `token` variable.
-
-4) Add graceful handling if unauthorized
-
-- If a fetch returns 401, show a short UI message: "Session expired – please log in" and navigate to `/admin` login or prompt to re-enter.
-
-5) Quick manual workaround (optional, for current session)
-
-- In browser console: `localStorage.setItem('adminToken', 'admin-secure-token-123');` then refresh `/admin`.
-
-6) Verify end-to-end
-
-- Reload `/admin` → should fetch messages (200 OK).
-- Toggle read/replied and delete → should succeed.
-- Hard refresh to confirm token persistence.
+## Implementation notes
+- Track an `activeId` in `HamburgerMenu` (set on click) to style active item; keep simple for now (no observer)
+- Do not move desktop CTAs into navbar; they remain in hero content to avoid competition
 
 ### To-dos
 
-- [ ] Add ADMIN_TOKEN and NEXT_PUBLIC_ADMIN_TOKEN to .env.local
-- [ ] Update isAuthenticated to accept ADMIN_TOKEN or NEXT_PUBLIC version
-- [ ] Use NEXT_PUBLIC_ADMIN_TOKEN fallback and unify token reads
-- [ ] Trigger fetchMessages only after token is available
-- [ ] Show message and redirect to login on Unauthorized
-- [ ] Manual test GET/PUT/DELETE and refresh behavior
+- [ ] Tighten Hero navbar spacing, contrast, and shadow
+- [ ] Reduce desktop nav gaps and set typography hierarchy
+- [ ] Adjust mobile drawer width, overlay, slide animation
+- [ ] Add section labels, grid alignment, and divider
+- [ ] Add active state with left border and font weight
+- [ ] Add CTA buttons under Quick Actions, de-emphasize vs nav it
