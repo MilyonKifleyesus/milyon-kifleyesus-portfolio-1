@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Menu,
-  X,
-  Home,
-  User,
-  Briefcase,
-  FolderOpen,
-  GraduationCap,
-  Mail,
-  Download,
-} from "lucide-react";
+import { Hop as Home, User, Briefcase, FolderOpen, Mail, Download, ChevronRight } from "lucide-react";
 
 interface HamburgerMenuProps {
   scrollToSection: (sectionId: string) => void;
@@ -19,17 +9,16 @@ interface HamburgerMenuProps {
 
 export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState<string>("projects"); // Default active item
+  const [activeItem, setActiveItem] = useState<string>("hero");
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Navigation items with icons matching specification
   const navItems = [
     { id: "hero", label: "Home", icon: Home },
     { id: "about", label: "About", icon: User },
-    { id: "projects", label: "Portfolio/Work", icon: FolderOpen },
+    { id: "projects", label: "Projects", icon: FolderOpen },
     { id: "services", label: "Services", icon: Briefcase },
     { id: "contact", label: "Contact", icon: Mail },
-    { id: "resume", label: "Resume/CV", icon: Download, isExternal: true, href: "/resume.pdf" },
+    { id: "resume", label: "Resume", icon: Download, isExternal: true, href: "/resume.pdf" },
   ];
 
   // Handle menu toggle
@@ -85,108 +74,131 @@ export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
       <button
         onClick={toggleMenu}
         onKeyDown={handleKeyDown}
-        className="relative z-50 p-2 rounded-md text-white hover:text-[#00BCD4] hover:scale-105 transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 min-h-[44px] min-w-[44px]"
+        className="relative z-[60] p-3 rounded-lg bg-gradient-to-br from-primary/10 to-transparent hover:from-primary/20 border border-primary/20 hover:border-primary/40 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] group"
         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={isOpen}
         aria-controls="nav-menu"
         role="button"
         tabIndex={0}
       >
-        <div className="w-6 h-6 flex flex-col justify-center items-center">
-          <span 
-            className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-              isOpen ? 'rotate-45 translate-y-1.5' : '-translate-y-1'
+        <div className="w-6 h-6 flex flex-col justify-center items-center gap-[5px]">
+          <span
+            className={`block h-[2px] w-6 bg-primary rounded-full transform transition-all duration-300 ease-out ${
+              isOpen ? 'rotate-45 translate-y-[7px]' : 'translate-y-0'
             }`}
           />
-          <span 
-            className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-              isOpen ? 'opacity-0' : 'opacity-100'
+          <span
+            className={`block h-[2px] w-6 bg-primary rounded-full transform transition-all duration-300 ease-out ${
+              isOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'
             }`}
           />
-          <span 
-            className={`block h-0.5 w-6 bg-current transform transition-all duration-300 ease-in-out ${
-              isOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-1'
+          <span
+            className={`block h-[2px] w-6 bg-primary rounded-full transform transition-all duration-300 ease-out ${
+              isOpen ? '-rotate-45 -translate-y-[7px]' : 'translate-y-0'
             }`}
           />
         </div>
       </button>
 
-      {/* Full Screen Overlay */}
-      <div 
-        className={`fixed inset-0 bg-[#121212] transition-opacity duration-300 ease-in-out z-[1000] ${
-          isOpen ? 'opacity-[0.98]' : 'opacity-0 pointer-events-none'
+      {/* Backdrop Overlay */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-all duration-500 ease-out z-[55] ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setIsOpen(false)}
+        aria-hidden="true"
       />
 
-      {/* Mobile Menu */}
-      <div 
+      {/* Mobile Menu Panel */}
+      <div
         id="nav-menu"
-        className={`fixed inset-0 bg-[#121212] transition-opacity duration-300 ease-in-out z-[1001] ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-gradient-to-br from-background via-background to-background/95 border-l border-primary/20 shadow-2xl transition-transform duration-500 ease-out z-[56] ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="navigation"
         aria-label="Mobile navigation"
       >
-        {/* Close Button */}
-        <button
-          onClick={toggleMenu}
-          className="absolute top-4 right-4 p-2 text-white hover:text-[#00BCD4] transition-colors duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 focus:ring-offset-[#121212] min-h-[44px] min-w-[44px]"
-          aria-label="Close menu"
-        >
-          <X className="w-6 h-6" />
-        </button>
+        {/* Menu Header */}
+        <div className="pt-20 pb-8 px-6 border-b border-primary/10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">Milyon Kifleyesus</p>
+              <p className="text-xs text-muted-foreground">Software Developer</p>
+            </div>
+          </div>
+        </div>
 
-        {/* Navigation Items Container */}
-        <div className="flex flex-col justify-center h-full px-6">
-          <nav className="space-y-0">
+        {/* Navigation Items */}
+        <nav className="py-6 px-4">
+          <div className="space-y-1">
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
               const isActive = activeItem === item.id;
-              
+
               return (
-                <div key={item.id}>
-                  <button
-                    onClick={() => handleNavClick(item)}
-                    className={`w-full text-left py-4 px-4 text-white hover:text-[#00BCD4] transition-all duration-200 ease-out group focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:ring-offset-2 focus:ring-offset-[#121212] ${
-                      isActive ? 'bg-[#00BCD4] text-white' : ''
-                    }`}
-                    style={{
-                      fontFamily: 'Poppins, sans-serif',
-                      fontSize: '18px',
-                      fontWeight: 400,
-                      animationDelay: `${0.1 + index * 0.05}s`,
-                      animation: isOpen ? 'fadeInUp 0.3s ease-out forwards' : 'none',
-                      opacity: isOpen ? 1 : 0,
-                    }}
-                    aria-label={`Navigate to ${item.label} section`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{item.label}</span>
-                      {item.isExternal && (
-                        <IconComponent className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                      )}
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item)}
+                  className={`w-full group relative overflow-hidden rounded-xl transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-primary ${
+                    isActive
+                      ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/20'
+                      : 'hover:bg-secondary/50 text-foreground'
+                  }`}
+                  style={{
+                    animationDelay: `${index * 0.05}s`,
+                    animation: isOpen ? 'slideInRight 0.4s ease-out forwards' : 'none',
+                    opacity: isOpen ? 1 : 0,
+                    transform: isOpen ? 'translateX(0)' : 'translateX(20px)',
+                  }}
+                  aria-label={`Navigate to ${item.label} section`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <div className="flex items-center justify-between py-4 px-5">
+                    <div className="flex items-center gap-4">
+                      <div className={`p-2 rounded-lg transition-colors duration-300 ${
+                        isActive
+                          ? 'bg-white/20'
+                          : 'bg-primary/10 group-hover:bg-primary/20'
+                      }`}>
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <span className="font-medium text-base">{item.label}</span>
                     </div>
-                  </button>
-                  {index < navItems.length - 1 && (
-                    <div className="border-t border-gray-600 mx-4" />
+                    <ChevronRight className={`w-5 h-5 transition-all duration-300 ${
+                      isActive
+                        ? 'opacity-100 translate-x-0'
+                        : 'opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0'
+                    }`} />
+                  </div>
+                  {isActive && (
+                    <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/30" />
                   )}
-                </div>
+                </button>
               );
             })}
-          </nav>
+          </div>
+        </nav>
+
+        {/* Menu Footer */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-primary/10">
+          <p className="text-xs text-center text-muted-foreground">
+            Designed & Built by Milyon Kifleyesus
+          </p>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes fadeInUp {
+        @keyframes slideInRight {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateX(20px);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
           }
         }
       `}</style>
