@@ -112,21 +112,21 @@ export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
       {/* Mobile Menu Panel */}
       <div
         id="nav-menu"
-        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-gradient-to-br from-background via-background to-background/95 border-l border-primary/20 shadow-2xl transition-transform duration-500 ease-out z-[56] ${
+        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-[#0D0D0D] border-l border-primary/30 shadow-2xl transition-transform duration-500 ease-out z-[56] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="navigation"
         aria-label="Mobile navigation"
       >
         {/* Menu Header */}
-        <div className="pt-20 pb-8 px-6 border-b border-primary/10">
+        <div className="pt-20 pb-8 px-6 border-b border-primary/20 bg-[#121212]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20">
               <span className="text-white font-bold text-lg">M</span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-foreground">Milyon Kifleyesus</p>
-              <p className="text-xs text-muted-foreground">Software Developer</p>
+              <p className="text-sm font-semibold text-white">Milyon Kifleyesus</p>
+              <p className="text-xs text-gray-300">Software Developer</p>
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
                   className={`w-full group relative overflow-hidden rounded-xl transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-primary ${
                     isActive
                       ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/20'
-                      : 'hover:bg-secondary/50 text-foreground'
+                      : 'hover:bg-[#1A1A1A] text-white'
                   }`}
                   style={{
                     animationDelay: `${index * 0.05}s`,
@@ -183,8 +183,8 @@ export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
         </nav>
 
         {/* Menu Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-primary/10">
-          <p className="text-xs text-center text-muted-foreground">
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-primary/20 bg-[#121212]">
+          <p className="text-xs text-center text-gray-400">
             Designed & Built by Milyon Kifleyesus
           </p>
         </div>
