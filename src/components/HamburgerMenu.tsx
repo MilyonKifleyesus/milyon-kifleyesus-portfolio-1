@@ -132,7 +132,7 @@ export default function HamburgerMenu({ scrollToSection }: HamburgerMenuProps) {
         </div>
 
         {/* Navigation Items */}
-        <nav className="py-6 px-4">
+        <nav className="py-6 px-4 bg-[#080808]">
           <div className="space-y-1">
             {navItems.map((item, index) => {
               const IconComponent = item.icon;
