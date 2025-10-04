@@ -229,22 +229,16 @@ export default function About() {
                 <strong className="text-primary">
                   Centennial College, Toronto
                 </strong>
-                , with an expected graduation in <strong>2027</strong>.
+                , with an expected graduation in <strong>2027</strong>. My journey into tech began in an unexpected place: running my own event decoration and design business for seven years in Eritrea. That experience taught me how to think creatively, manage complex projects, and deliver solutions that delight people — skills I now bring into building software.
               </p>
               <p className="text-muted-foreground">
-                My journey in software development started with a curiosity
-                about how things work behind the scenes. Since then, I've been
-                building projects that solve real-world problems, from web
-                applications to database-driven systems. I'm particularly
-                interested in full-stack development and creating user-centric
-                applications.
+                When I moved to Canada, I worked with Hungerhub, where reliability, teamwork, and customer focus became part of who I am. Inspired by technology's ability to solve real problems, I shifted my career toward software engineering and began developing a strong foundation in full-stack development (React, TypeScript, Node.js, MongoDB, PostgreSQL), mobile app development with React Native, and modern UI/UX design using Figma, Tailwind CSS, and animation libraries like Framer Motion and Three.js.
               </p>
               <p className="text-muted-foreground">
-                When I'm not coding, you can find me exploring new technologies,
-                contributing to open-source projects, or learning about the
-                latest developments in AI and cloud computing. I'm always eager
-                to take on new challenges and collaborate with fellow
-                developers.
+                I've built projects that merge creativity with technical depth — including <strong className="text-primary">Wheels & Code</strong>, an automotive platform with real-time booking and customer dashboards; an advanced ride-sharing app with secure payments and live tracking; and a 3D interactive portfolio that showcases my skills through immersive design. I'm also exploring open-source contributions, AI integration, and cloud technologies to stay ahead of industry trends.
+              </p>
+              <p className="text-muted-foreground">
+                I'm a self-motivated problem solver who thrives in collaborative environments and loves turning ideas into reliable, impactful digital products. My goal is to create innovative, user-focused applications and continue growing as a developer who bridges creativity with technology.
               </p>
 
               {/* Quick Stats */}
