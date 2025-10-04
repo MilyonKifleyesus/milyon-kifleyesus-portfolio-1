@@ -83,7 +83,7 @@ export default function Footer() {
     {
       name: 'LinkedIn',
       icon: <Linkedin className="w-5 h-5" />,
-      href: 'https://linkedin.com/in/milyonkifle'
+      href: 'https://www.linkedin.com/in/milyon-kifleyesus-9170b1364'
     },
     {
       name: 'Email',

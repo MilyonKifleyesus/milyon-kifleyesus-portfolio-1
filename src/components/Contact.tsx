@@ -6,15 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Mail,
-  MapPin,
-  Phone,
-  Send,
-  Loader2,
-  CheckCircle,
-  XCircle,
-} from "lucide-react";
+import { Mail, MapPin, Send, Loader as Loader2, CircleCheck as CheckCircle, Circle as XCircle } from "lucide-react";
 // Lazy-load GSAP at runtime to reduce initial JS
 let gsapRef: any = null;
 let ScrollTriggerRef: any = null;
@@ -181,12 +173,6 @@ export default function Contact() {
       label: "Email",
       value: "mili.kifleyesus@gmail.com",
       href: "mailto:mili.kifleyesus@gmail.com",
-    },
-    {
-      icon: <Phone className="w-5 h-5" />,
-      label: "Phone",
-      value: "+1 (416) 555-0123",
-      href: "tel:+14165550123",
     },
     {
       icon: <MapPin className="w-5 h-5" />,
