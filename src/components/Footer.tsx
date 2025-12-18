@@ -78,7 +78,7 @@ export default function Footer() {
     {
       name: 'GitHub',
       icon: <Github className="w-5 h-5" />,
-      href: 'https://github.com/milyonkifle'
+      href: 'https://github.com/MilyonKifleyesus/milyon-kifleyesus-portfolio-1.git'
     },
     {
       name: 'LinkedIn',
@@ -134,6 +134,16 @@ export default function Footer() {
                 >
                   Projects
                 </button>
+              </li>
+              <li>
+                <a 
+                  href="https://code2tutorial.com/tutorial/e532e348-035b-4199-a0f2-c5857f45f541/05_animation_system__gsap__.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  GSAP Animation Doc
+                </a>
               </li>
               <li>
                 <button 

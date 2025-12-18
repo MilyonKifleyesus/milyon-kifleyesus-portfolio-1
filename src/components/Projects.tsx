@@ -16,6 +16,11 @@ export default function Projects() {
   const [expandedProject, setExpandedProject] = React.useState<number | null>(
     null
   );
+  const [lightboxImage, setLightboxImage] = React.useState<string | null>(null);
+
+  const toggleProject = (idx: number) => {
+    setExpandedProject((prev) => (prev === idx ? null : idx));
+  };
 
   const projects = [
     {
@@ -23,8 +28,7 @@ export default function Projects() {
       role: "Full-Stack Developer & UI/UX Designer",
       description:
         "A comprehensive salon management platform that streamlines operations through seamless appointment booking, intelligent staff scheduling, and centralized customer management. Built with modern web technologies to deliver a mobile-responsive experience with real-time updates and automated communication systems.",
-      image:
-        "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&h=600&fit=crop",
+      image: "/projectElla.png",
       tech: [
         "React",
         "Node.js",
@@ -50,7 +54,7 @@ export default function Projects() {
       ],
 
       github: "https://github.com/milyonkifle/elite-cuts",
-      live: "https://elite-cuts-demo.vercel.app",
+      live: "https://web-ella-beauty-salon-l2mukucey.vercel.app/",
       featured: true,
     },
     {
@@ -146,6 +150,97 @@ export default function Projects() {
       live: "https://linux-admin-demo.vercel.app",
       featured: false,
     },
+    {
+      title: "Linx - Job Search & Recruitment Full-Stack Platform",
+      role: "Full-Stack Developer (Team Collaboration)",
+      description:
+        "Collaborated with a team to design and build a full-stack job search platform connecting companies with job seekers.",
+      image:
+        "https://images.unsplash.com/photo-1454165205744-3b78555e5572?w=900&h=700&fit=crop",
+      tech: [
+        "React",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Tailwind CSS",
+        "PageSpeed Insights",
+      ],
+      features: [
+        "User and company profiles with saved jobs and application tracking",
+        "Job posting workflows with filtering, search, and responsive UI",
+        "Secure authentication with role-based dashboards for recruiters and candidates",
+        "Performance audits and tuning with Google Lighthouse/PageSpeed Insights",
+        "Roadmap: external job API integration and deeper mobile optimization",
+      ],
+      outcomes: [
+        "Delivered a collaborative full-stack architecture balancing recruiter and seeker needs",
+        "Resolved async communication and component integration issues through clear API contracts",
+      ],
+      github: "https://github.com/milyonkifle",
+      live: "#",
+      featured: true,
+    },
+    {
+      title: "Full-Stack Web Application | Wheels & Code",
+      role: "Full-Stack Developer",
+      description:
+        "Automotive platform with vehicle inventory, service bookings, customer dashboards, and an admin panel.",
+      image:
+      "/whealCar.png",
+      tech: [
+        "React",
+        "Supabase (PostgreSQL/Auth/Realtime)",
+        "Tailwind CSS",
+        "Vite",
+        "Netlify",
+        "GitHub Actions",
+      ],
+      features: [
+        "Vehicle inventory browsing with filtered search and detail views",
+        "Service booking flows with customer dashboards and notifications",
+        "Admin panel for managing vehicles, bookings, and user roles",
+        "Supabase-powered auth, database, and realtime updates",
+        "CI workflows (GitHub Actions) for automated build, lint, and test",
+        "Netlify deployment with environment-based secrets",
+      ],
+      outcomes: [
+        "Shipped a responsive experience covering shoppers, service teams, and admins",
+        "Integrated realtime data flows without sacrificing performance or reliability",
+      ],
+      docs:
+        "https://code2tutorial.com/tutorial/16e4d81a-54f8-46bc-9bf8-6656202d4419/index.md",
+      github: "https://github.com/milyonkifle",
+      live: "https://6943873f89fc240008da7261--hilarious-dango-a1b7f9.netlify.app/",
+      featured: true,
+    },
+    {
+      title: "Hwunet Lounge & Bar - Restaurant Website Design (Figma)",
+      role: "Product Designer",
+      description:
+        "Responsive website design for an Eritrean restaurant and lounge with menu highlights, reservations, gallery, and events sections.",
+      image: "/figmaRestorant.jpeg",
+      gallery: [
+        "/figmaRestorant.jpeg",
+        "/dTR.jpeg",
+        "/desRfigma.jpeg",
+        "/mobilefigmaR.jpeg",
+        "/TabletR.jpeg",
+      ],
+      tech: ["Figma", "Design Systems", "Prototyping", "Accessibility"],
+      features: [
+        "Cohesive design system with gold/bronze accents, dark theme, and Eritrean patterns",
+        "Desktop, tablet, and mobile-responsive layouts with interactive prototypes",
+        "Menu highlights, reservation flow, gallery, and events sections for clear discovery",
+        "User-centric design emphasizing accessibility, hierarchy, and seamless navigation",
+      ],
+      outcomes: [
+        "Produced high-fidelity prototypes tailored to dining, reservations, and events",
+        "Balanced cultural authenticity with modern UI patterns for a premium feel",
+      ],
+      github: "https://github.com/milyonkifle",
+      live: "#",
+      featured: false,
+    },
   ];
 
   useEffect(() => {
@@ -224,8 +319,19 @@ export default function Projects() {
     };
   }, []);
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxImage(null);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   return (
-    <section
+    <>
+      <section
       ref={sectionRef}
       id="projects"
       className="py-20 px-4 bg-secondary/20 relative overflow-hidden"
@@ -254,6 +360,15 @@ export default function Projects() {
             <Card
               key={index}
               className="project-card bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-500 overflow-hidden group relative"
+              onClick={() => toggleProject(index)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  toggleProject(index);
+                }
+              }}
             >
               {/* Featured badge */}
               {project.featured && (
@@ -311,7 +426,7 @@ export default function Projects() {
                             key={idx}
                             className="text-sm text-muted-foreground flex items-start gap-2"
                           >
-                            <span className="text-primary mt-1.5">•</span>
+                            <span className="text-primary mt-1.5">-</span>
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -344,11 +459,49 @@ export default function Projects() {
                               key={idx}
                               className="text-sm text-muted-foreground flex items-start gap-2"
                             >
-                              <span className="text-primary mt-1.5">✓</span>
+                              <span className="text-primary mt-1.5">-</span>
                               <span>{outcome}</span>
                             </li>
                           ))}
                         </ul>
+                      </div>
+                    )}
+
+                    {project.gallery && project.gallery.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                          Gallery
+                        </h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {project.gallery.map((img, idx) => (
+                            <div
+                              key={`${project.title}-gallery-${idx}`}
+                              className="relative aspect-video overflow-hidden rounded-lg border border-border/70 bg-card/60"
+                              role="button"
+                              tabIndex={0}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxImage(img);
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setLightboxImage(img);
+                                }
+                              }}
+                            >
+                              <Image
+                                src={img}
+                                alt={`${project.title} preview ${idx + 1}`}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -357,11 +510,10 @@ export default function Projects() {
                 {/* Show more/less button */}
                 {(project.features || project.outcomes) && (
                   <button
-                    onClick={() =>
-                      setExpandedProject(
-                        expandedProject === index ? null : index
-                      )
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleProject(index);
+                    }}
                     className="text-sm text-primary hover:text-primary/80 font-medium transition-colors flex items-center gap-1"
                   >
                     {expandedProject === index ? (
@@ -417,7 +569,25 @@ export default function Projects() {
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-wrap gap-3 pt-4">
+                  {project.docs && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      asChild
+                      className="flex-1 border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all group/btn"
+                    >
+                      <a
+                        href={project.docs}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                        Tutorial
+                      </a>
+                    </Button>
+                  )}
                   <Button
                     size="sm"
                     variant="outline"
@@ -428,6 +598,7 @@ export default function Projects() {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <Github className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
                       Code
@@ -442,6 +613,7 @@ export default function Projects() {
                       href={project.live}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <ExternalLink className="w-4 h-4 mr-2 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                       Live Demo
@@ -456,6 +628,34 @@ export default function Projects() {
           ))}
         </div>
       </div>
-    </section>
+      </section>
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6"
+          onClick={() => setLightboxImage(null)}
+          role="presentation"
+        >
+          <div
+            className="relative w-full max-w-5xl h-[70vh] md:h-[80vh] bg-card/90 rounded-xl overflow-hidden border border-border"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={lightboxImage}
+              alt="Gallery preview full size"
+              fill
+              sizes="100vw"
+              className="object-contain"
+              priority
+            />
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-card/80 border border-border text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
